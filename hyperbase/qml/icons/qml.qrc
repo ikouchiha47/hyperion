@@ -1,0 +1,9 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+	<qresource prefix="/icons">
+        <file alias="go-next.png">go-next.png</file>
+        <file alias="go-previous.png">go-previous.png</file>
+        <file alias="process-stop.png">process-stop.png</file>
+        <file alias="view-refresh.png">view-refresh.png</file>
+    </qresource>
+</RCC>

@@ -14,15 +14,17 @@ fn main() {
             uri: "com.hyperion.cxx_qt.base",
             rust_files: &["src/cxxqt_object.rs"],
             qml_files: &[
+                "qml/main.qml",
                 "qml/BrowserWindow.qml",
                 "qml/BrowserDialog.qml",
                 "qml/DownloadView.qml",
                 "qml/FindBar.qml",
                 "qml/WebAuthDialog.qml",
                 "qml/FullScreenNotification.qml",
-                "qml/main.qml",
             ],
             ..Default::default()
         })
+        .qt_module("Quick")
+        .qrc("qml/icons/qml.qrc")
         .build();
 }

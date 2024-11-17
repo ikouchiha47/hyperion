@@ -17,6 +17,7 @@ QtObject {
             // fullVersionList["Hyperion"] = "1.0";
             // defaultProfile.clientHints.fullVersionList = fullVersionList;
             // console.log(defaultProfile.clientHints)
+            createWindow(defaultProfile)
         }
 
     }
@@ -32,9 +33,11 @@ QtObject {
         onClosing: destroy()
     }
     function createWindow(profile) {
+        console.log("create window")
         var newWindow = browserWindowComponent.createObject(root);
         newWindow.currentWebView.profile = profile;
         profile.downloadRequested.connect(newWindow.onDownloadRequested);
+        console.log("new", newWindow);
         return newWindow;
     }
     function createDialog(profile) {
