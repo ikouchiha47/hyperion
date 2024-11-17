@@ -1,56 +1,49 @@
-import QtQuick 2.12
-import QtQuick.Controls 2.12
-import QtQuick.Window 2.12
+import QtQuick 
+import QtWebEngine
 
 // This must match the uri and version
 // specified in the qml_module in the build.rs script.
 import com.hyperion.cxx_qt.base 1.0
 
-ApplicationWindow {
-    height: 480
-    title: qsTr("Hello World")
-    visible: true
-    width: 640
-    color: palette.window
+QtObject {
+    id: root
 
-    HyperObject {
-        id: myObject
-        number: 1
-        string: qsTr("My String with my number: %1").arg(myObject.number)
+    property QtObject defaultProfile: WebEngineProfile {
+        offTheRecord: false
+        storageName: "Profile"
+        
+        Component.onCompleted: {
+            // let fullVersionList = defaultProfile.clientHints.fullVersionList;
+            // fullVersionList["Hyperion"] = "1.0";
+            // defaultProfile.clientHints.fullVersionList = fullVersionList;
+            // console.log(defaultProfile.clientHints)
+        }
+
     }
 
-    Column {
-        anchors.fill: parent
-        anchors.margins: 10
-        spacing: 10
+    property QtObject otrProfile: WebEngineProfile {
+        offTheRecord: true
+    }
 
-        Label {
-            text: qsTr("Number: %1").arg(myObject.number)
-            color: palette.text
-        }
-
-        Label {
-            text: qsTr("String: %1").arg(myObject.string)
-            color: palette.text
-        }
-
-        Button {
-            text: qsTr("Increment Number")
-
-            onClicked: myObject.incrementNumber()
-        }
-
-        Button {
-            text: qsTr("Say Hi!")
-
-            onClicked: myObject.sayHi(myObject.string, myObject.number)
-        }
-
-        Button {
-            text: qsTr("Quit")
-
-            onClicked: Qt.quit()
-        }
+    property Component browserWindowComponent: BrowserWindow {
+        applicationRoot: root
+    }
+    property Component browserDialogComponent: BrowserDialog {
+        onClosing: destroy()
+    }
+    function createWindow(profile) {
+        var newWindow = browserWindowComponent.createObject(root);
+        newWindow.currentWebView.profile = profile;
+        profile.downloadRequested.connect(newWindow.onDownloadRequested);
+        return newWindow;
+    }
+    function createDialog(profile) {
+        var newDialog = browserDialogComponent.createObject(root);
+        newDialog.currentWebView.profile = profile;
+        return newDialog;
+    }
+    function load(url) {
+        var browserWindow = createWindow(defaultProfile);
+        browserWindow.currentWebView.url = url;
     }
 }
-

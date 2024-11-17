@@ -9,7 +9,9 @@ fn main() {
 
     // Load the QML path into the engine
     if let Some(engine) = engine.as_mut() {
-        engine.load(&QUrl::from("qrc:/qt/qml/com/hyperion/cxx_qt/base/qml/main.qml"));
+        engine.load(&QUrl::from(
+            "qrc:/qt/qml/com/hyperion/cxx_qt/base/qml/main.qml",
+        ));
     }
 
     if let Some(engine) = engine.as_mut() {

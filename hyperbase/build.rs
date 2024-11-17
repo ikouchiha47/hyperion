@@ -2,7 +2,6 @@
 
 use cxx_qt_build::{CxxQtBuilder, QmlModule};
 
-
 fn main() {
     CxxQtBuilder::new()
         // Link Qt's Network library
@@ -14,7 +13,15 @@ fn main() {
         .qml_module(QmlModule {
             uri: "com.hyperion.cxx_qt.base",
             rust_files: &["src/cxxqt_object.rs"],
-            qml_files: &["qml/main.qml"],
+            qml_files: &[
+                "qml/BrowserWindow.qml",
+                "qml/BrowserDialog.qml",
+                "qml/DownloadView.qml",
+                "qml/FindBar.qml",
+                "qml/WebAuthDialog.qml",
+                "qml/FullScreenNotification.qml",
+                "qml/main.qml",
+            ],
             ..Default::default()
         })
         .build();
