@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+SOURCE_URL="https://download.qt.io/official_releases/qt"
+
+check_dependencies() {
+  command -v git >/dev/null 2>&1 || { echo "Git is not installed. Exiting."; exit 1; }
+}
+
+list() {
+	versions=$(git ls-remote --heads --tags https://code.qt.io/qt/qt5.git | awk '{print $2}' | grep -oP '\d\.\d\.\d$'| sort -V)
+	echo "$versions"
+}
+
+check_dependencies
+list

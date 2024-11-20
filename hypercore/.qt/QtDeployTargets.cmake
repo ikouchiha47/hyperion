@@ -1,0 +1,2 @@
+set(__QT_DEPLOY_TARGET_quicknanobrowser_FILE /home/darksied/dev/projects/hyperion/hypercore/quicknanobrowser)
+set(__QT_DEPLOY_TARGET_quicknanobrowser_TYPE EXECUTABLE)

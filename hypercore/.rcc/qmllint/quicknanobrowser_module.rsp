@@ -1,0 +1,12 @@
+-I
+/home/darksied/dev/projects/hyperion/hypercore
+-I
+/usr/lib/qt6/qml
+--resource
+/home/darksied/dev/projects/hyperion/hypercore/.qt/rcc/qmake_BrowserUtils.qrc
+--resource
+/home/darksied/dev/projects/hyperion/hypercore/.qt/rcc/resources.qrc
+--resource
+/home/darksied/dev/projects/hyperion/hypercore/.qt/rcc/resources1.qrc
+--module
+BrowserUtils

@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+QT_VERSION="${1:?Version is required}"
+QT_DEFAULT_PREFIX="/usr/local/Qt-${QT_VERSION}"
+QT_PREFIX_DIR="${QT_PREFIX_DIR:-$QT_DEFAULT_PREFIX_DIR}"
+QT_BUILD_DIR="${HOME}/dev/qt-build"
+QT_SRC_DIR="/tmp/qt-everywhere-src-${QT_VERSION}"
+
+declare SUBMODULES
+
+SOURCE_URL="https://download.qt.io/official_releases/qt"
+
+# Function to check prerequisites
+check_dependencies() {
+  command -v curl >/dev/null 2>&1 || { echo "curl is not installed. Exiting."; exit 1; }
+  command -v tar >/dev/null 2>&1 || { echo "tar is not installed. Exiting."; exit 1; }
+  command -v cmake >/dev/null 2>&1 || { echo "cmake is not installed. Exiting."; exit 1; }
+  command -v ninja >/dev/null 2>&1 || { echo "ninja is not installed. Exiting."; exit 1; }
+  command -v python3 >/dev/null 2>&1 || { echo "Python 3 is not installed. Exiting."; exit 1; }
+  command -v git >/dev/null 2>&1 || { echo "Git is not installed. Exiting."; exit 1; }
+  
+  CMAKE_VERSION=$(cmake --version | head -n1 | awk '{print $3}')
+  if [[ "$(echo -e "${CMAKE_VERSION}\n3.21" | sort -V | head -n1)" == "3.21" ]]; then
+    echo "Warning: CMake version < 3.21. Static builds may not work correctly."
+  fi
+}
+
+
+# Download the Qt source
+download_qt() {
+  echo "Cloning Qt ${QT_VERSION} TO ${QT_SRC_DIR}"
+
+  if [[ -d "${QT_SRC_DIR}" ]]; then
+    echo "Source already present"
+    echo "To re-download: rm -rf ${QT_SRC_DIR}"
+    return
+  fi
+
+  git clone --branch "v${QT_VERSION}" https://code.qt.io/qt/qt5.git "${QT_SRC_DIR}"
+}
+
+# Build and install Qt
+build_qt() {
+  echo "Configuring Qt ${QT_VERSION}..."
+  [[ ! -z "$SUBMODULES" ]] && echo "Submodules ${SUBMODULES}"
+  echo "Install dir: ${QT_PREFIX_DIR}"
+
+  if [[ -z "$SUBMODULES" ]]; then
+    "${QT_SRC_DIR}/configure" -init-submodules -prefix "${QT_PREFIX_DIR}"
+  else
+    "${QT_SRC_DIR}/configure" \
+      -init-submodules \
+      -submodules "${SUBMODULES}" \
+      -prefix "${QT_PREFIX_DIR}"
+  fi
+
+  echo "Building Qt ${QT_VERSION}..."
+  cmake --build . --parallel
+
+  echo "Installing Qt ${QT_VERSION}..."
+  cmake --install .
+}
+
+# Main script logic
+check_dependencies
+download_qt
+build_qt
+
+echo "Qt ${QT_VERSION} installed successfully to ${QT_PREFIX_DIR}."
+echo "Adding ${QT_PREFIX_DIR}/bin to PATH in ~/.profile"
+
+echo "PATH=\$PATH:${QT_PREFIX_DIR}/bin" | tee -a "${HOME}/.profile"
+cat "${HOME}/.profile"
+
+echo "source ${QT_PREFIXD_DIR}/bin"
+echo "done"

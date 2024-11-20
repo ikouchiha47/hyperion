@@ -1,9 +1,8 @@
-import QtQuick 2.15
-import QtWebEngine 1.15
+// Copyright (C) 2022 The Qt Company Ltd.
+// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR BSD-3-Clause
 
-// This must match the uri and version
-// specified in the qml_module in the build.rs script.
-import com.hyperion.cxx_qt.base 1.0
+import QtQuick
+import QtWebEngine
 
 QtObject {
     id: root
@@ -11,13 +10,10 @@ QtObject {
     property QtObject defaultProfile: WebEngineProfile {
         offTheRecord: false
         storageName: "Profile"
-        
         Component.onCompleted: {
-            // let fullVersionList = defaultProfile.clientHints.fullVersionList;
-            // fullVersionList["Hyperion"] = "1.0";
-            // defaultProfile.clientHints.fullVersionList = fullVersionList;
-            // console.log(defaultProfile.clientHints)
-            // createWindow(defaultProfile)
+            let fullVersionList = defaultProfile.clientHints.fullVersionList;
+            fullVersionList["QuickNanoBrowser"] = "1.0";
+            defaultProfile.clientHints.fullVersionList = fullVersionList;
         }
 
     }
@@ -33,11 +29,9 @@ QtObject {
         onClosing: destroy()
     }
     function createWindow(profile) {
-        console.log("create window")
         var newWindow = browserWindowComponent.createObject(root);
         newWindow.currentWebView.profile = profile;
         profile.downloadRequested.connect(newWindow.onDownloadRequested);
-        console.log("new", newWindow);
         return newWindow;
     }
     function createDialog(profile) {

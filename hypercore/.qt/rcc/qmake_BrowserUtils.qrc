@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="/BrowserUtils">
+    <file alias="qmldir">/home/darksied/dev/projects/hyperion/hypercore/BrowserUtils/qmldir</file>
+  </qresource>
+</RCC>
+

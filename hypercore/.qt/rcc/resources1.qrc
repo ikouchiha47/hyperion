@@ -1,0 +1,9 @@
+<RCC>
+  <qresource prefix="/icons">
+    <file alias="go-next.png">/home/darksied/dev/projects/hyperion/hypercore/icons/3rdparty/go-next.png</file>
+    <file alias="go-previous.png">/home/darksied/dev/projects/hyperion/hypercore/icons/3rdparty/go-previous.png</file>
+    <file alias="process-stop.png">/home/darksied/dev/projects/hyperion/hypercore/icons/3rdparty/process-stop.png</file>
+    <file alias="view-refresh.png">/home/darksied/dev/projects/hyperion/hypercore/icons/3rdparty/view-refresh.png</file>
+  </qresource>
+</RCC>
+

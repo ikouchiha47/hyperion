@@ -1,0 +1,15 @@
+-rootPath
+/home/darksied/dev/projects/hyperion/hypercore
+-cmake-output
+-output-file
+/home/darksied/dev/projects/hyperion/hypercore/.qt/qml_imports/quicknanobrowser_build.cmake
+-importPath
+/home/darksied/dev/projects/hyperion/hypercore/BrowserUtils
+-importPath
+/home/darksied/dev/projects/hyperion/hypercore
+-importPath
+/usr/lib/qt6/qml
+-qrcFiles
+/home/darksied/dev/projects/hyperion/hypercore/.qt/rcc/qmake_BrowserUtils.qrc
+/home/darksied/dev/projects/hyperion/hypercore/.qt/rcc/resources.qrc
+/home/darksied/dev/projects/hyperion/hypercore/.qt/rcc/resources1.qrc

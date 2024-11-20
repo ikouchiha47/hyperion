@@ -1,0 +1,12 @@
+<RCC>
+  <qresource prefix="/">
+    <file alias="ApplicationRoot.qml">/home/darksied/dev/projects/hyperion/hypercore/ApplicationRoot.qml</file>
+    <file alias="BrowserDialog.qml">/home/darksied/dev/projects/hyperion/hypercore/BrowserDialog.qml</file>
+    <file alias="BrowserWindow.qml">/home/darksied/dev/projects/hyperion/hypercore/BrowserWindow.qml</file>
+    <file alias="DownloadView.qml">/home/darksied/dev/projects/hyperion/hypercore/DownloadView.qml</file>
+    <file alias="FindBar.qml">/home/darksied/dev/projects/hyperion/hypercore/FindBar.qml</file>
+    <file alias="FullScreenNotification.qml">/home/darksied/dev/projects/hyperion/hypercore/FullScreenNotification.qml</file>
+    <file alias="WebAuthDialog.qml">/home/darksied/dev/projects/hyperion/hypercore/WebAuthDialog.qml</file>
+  </qresource>
+</RCC>
+
