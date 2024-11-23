@@ -1,9 +1,17 @@
 pub mod cxxqt_object;
+pub mod qtwebengine;
 
 use cxx_qt_lib::{QGuiApplication, QQmlApplicationEngine, QUrl};
+use qtwebengine::QWebEngine;
+
+pub fn startup_url() -> QUrl {
+    QUrl::from("chrome://qt")
+}
 
 fn main() {
     // Create the application and engine
+    QWebEngine::initialize();
+
     let mut app = QGuiApplication::new();
     let mut engine = QQmlApplicationEngine::new();
 

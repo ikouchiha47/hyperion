@@ -10,9 +10,11 @@ fn main() {
         // - Qt Qml is linked by enabling the qt_qml Cargo feature of cxx-qt-lib.
         // - Qt Qml requires linking Qt Network on macOS
         .qt_module("Network")
+        .qt_module("Quick")
+        .qt_module("WebEngineQuick")
         .qml_module(QmlModule {
             uri: "com.hyperion.cxx_qt.base",
-            rust_files: &["src/cxxqt_object.rs"],
+            rust_files: &["src/qtwebengine.rs", "src/cxxqt_object.rs"],
             qml_files: &[
                 "qml/main.qml",
                 "qml/BrowserWindow.qml",

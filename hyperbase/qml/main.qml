@@ -18,6 +18,7 @@ QtObject {
             // defaultProfile.clientHints.fullVersionList = fullVersionList;
             // console.log(defaultProfile.clientHints)
             // createWindow(defaultProfile)
+            load("chrome://qt")
         }
 
     }

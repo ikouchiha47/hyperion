@@ -7,10 +7,10 @@ project(quicknanobrowser LANGUAGES CXX)
 set(CMAKE_AUTOMOC ON)
 
 if(NOT DEFINED INSTALL_EXAMPLESDIR)
-    set(INSTALL_EXAMPLESDIR "examples")
+    set(INSTALL_EXAMPLESDIR "hyperion")
 endif()
 
-set(INSTALL_EXAMPLEDIR "${INSTALL_EXAMPLESDIR}/webenginequick/quicknanobrowser")
+set(INSTALL_EXAMPLEDIR "${INSTALL_EXAMPLESDIR}/hypercore/dist")
 
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick WebEngineQuick)
 
@@ -30,6 +30,11 @@ set_target_properties(quicknanobrowser PROPERTIES
     WIN32_EXECUTABLE TRUE
     MACOSX_BUNDLE TRUE
     MACOSX_BUNDLE_GUI_IDENTIFIER "io.qt.examples.webenginequick.quicknanobrowser"
+
+    CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
+    CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
+    CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+
 )
 
 target_link_libraries(quicknanobrowser PUBLIC
