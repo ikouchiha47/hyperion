@@ -14,23 +14,23 @@
 #include <QtCore/QCommandLineOption>
 #include <QtCore/QLoggingCategory>
 
-static QUrl startupUrl()
-{
-    QUrl ret;
-    QStringList args(qApp->arguments());
-    args.takeFirst();
-    for (const QString &arg : qAsConst(args)) {
-        if (arg.startsWith(QLatin1Char('-')))
-             continue;
-        ret = Utils::fromUserInput(arg);
-        if (ret.isValid())
-            return ret;
-    }
-    return QUrl(QStringLiteral("chrome://qt"));
-}
+// static QUrl startupUrl() {
+//     QUrl ret;
+//     QStringList args(qApp->arguments());
+//     args.takeFirst();
+//
+//     for (const QString &arg : qAsConst(args)) {
+//         if (arg.startsWith(QLatin1Char('-')))
+//              continue;
+//
+//         ret = Utils::fromUserInput(arg);
+//         if (ret.isValid())
+//             return ret;
+//     }
+//     return QUrl(QStringLiteral("chrome://qt"));
+// }
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
     QCoreApplication::setApplicationName("Quick Nano Browser");
     QCoreApplication::setOrganizationName("QtProject");
 
@@ -41,11 +41,10 @@ int main(int argc, char **argv)
 
     QQmlApplicationEngine appEngine;
     appEngine.load(QUrl("qrc:/ApplicationRoot.qml"));
+
     if (appEngine.rootObjects().isEmpty())
         qFatal("Failed to load sources");
 
-    QMetaObject::invokeMethod(appEngine.rootObjects().constFirst(),
-                              "load", Q_ARG(QVariant, startupUrl()));
 
     return app.exec();
 }
