@@ -68,7 +68,7 @@ ApplicationWindow {
         }
     }
     Action {
-        shortcut: StandardKey.AddTab
+        shortcut: "Ctrl+T"
         onTriggered: {
             tabBar.createTab(tabBar.count != 0 ? currentWebView.profile : defaultProfile);
             addressBar.forceActiveFocus();
@@ -76,13 +76,15 @@ ApplicationWindow {
         }
     }
     Action {
-        shortcut: StandardKey.Close
+        shortcut: "Ctrl+W"
         onTriggered: {
-            currentWebView.triggerWebAction(WebEngineView.RequestClose);
+            if (currentWebView) {
+                tabBar.removeView(tabBar.currentIndex);
+            }
         }
     }
     Action {
-        shortcut: StandardKey.Quit
+        shortcut: "Ctrl+Q"
         onTriggered: browserWindow.close()
     }
     Action {
@@ -692,7 +694,6 @@ ApplicationWindow {
             onTriggered: devToolsEnabled.checked = false
         }
         onWindowCloseRequested: function(request) {
-            // Delay hiding for keep the inspectedView set to receive the ACK message of close.
             hideTimer.running = true;
         }
     }
