@@ -219,9 +219,25 @@ ApplicationWindow {
                 onClicked: currentWebView && currentWebView.loading ? currentWebView.stop() : currentWebView.reload()
                 activeFocusOnTab: !browserWindow.platformIsMac
             }
+
+            Item {
+                Layout.fillWidth: true 
+                Layout.fillHeight: true 
+                width: 2
+            }
+
             TextField {
                 id: addressBar
                 implicitHeight: parent.height - 10
+
+                clip: true
+                leftPadding: 24
+                focus: true
+
+                anchors.leftMargin: 200
+
+                Layout.fillWidth: true
+                verticalAlignment: TextInput.AlignVCenter
 
                 Image {
                     anchors.verticalCenter: addressBar.verticalCenter;
@@ -274,14 +290,7 @@ ApplicationWindow {
                         }
                     }
                 }
-
-                verticalAlignment: TextInput.AlignVCenter
-                
-                clip: true
-                leftPadding: 26
-                focus: true
-                Layout.fillWidth: true
-
+ 
                 Binding on text {
                     when: currentWebView
                     value: currentWebView.url
@@ -454,59 +463,54 @@ ApplicationWindow {
         id: tabButtonComponent
 
         TabButton {
-            property color frameColor: "#999"
-            property color fillColor: "#eee"
-            property color nonSelectedColor: "#ddd"
+            property color nonSelectedColor: "transparent"
             property string tabTitle: "New Tab"
+            property int tabIndex: -1
 
-            width: 98
+            width: 160
+
+            implicitWidth: Math.max(text.width + 10, 60)
+            implicitHeight: 50
 
             id: tabButton
+
             contentItem: Rectangle {
                 id: tabRectangle
-                color: tabButton.down ? fillColor : nonSelectedColor
-                border.width: 1
-                border.color: frameColor
-
-                anchors.fill: parent
-
-                // implicitWidth: Math.max(text.width + 10, 50)
-                implicitHeight: Math.max(text.height + 10, 40)
+                color: "transparent"
                 
-                Rectangle { height: 1 ; width: parent.width ; color: frameColor; anchors.top: parent.top}
-                Rectangle { height: parent.height ; width: 1; color: frameColor; anchors.left: parent.left}
-                Rectangle { x: parent.width - 2; height: parent.height ; width: 1; color: frameColor}
-
-                Text {
-                    id: text
-                    anchors.left: parent.left
-                    anchors.verticalCenter: parent.verticalCenter
+                Rectangle {
+                    anchors.fill: parent
+                    radius: 8
+                    color: tabBar.currentIndex === tabIndex ? "#eee" : "transparent"
                     
-                    anchors.leftMargin: 6
-                    anchors.right: button.left
-                    anchors.rightMargin: 6
-
-                    text: tabButton.tabTitle
-                    elide: Text.ElideRight
-                    color: tabButton.down ? "black" : frameColor
-                    width: parent.width - button.background.width
-                }
-
-                Button {
-                    id: button
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.rightMargin: 4
-                    height: 12
-                    width: 12
-
-                    background: Rectangle {
-                        implicitWidth: 12
-                        implicitHeight: 12
-                        color: button.hovered ? "#ccc" : tabRectangle.color
-                        Text {text: "x"; anchors.centerIn: parent; color: "gray"}
+                    Text {
+                        id: tabText
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.centerIn: parent 
+                        text: tabButton.tabTitle
+                        color: tabBar.currentIndex === tabIndex ? "black" : "#eee"
+                        font.weight: tabBar.currentIndex === tabIndex ? Font.Bold : Font.Normal
+                        elide: Text.ElideRight
+                        maximumLineCount: 1
                     }
-                    onClicked: tabButton.closeTab()
+
+                    Button {
+                        id: button
+                        anchors.right: parent.right
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.rightMargin: 4
+                        height: 24
+                        width: 24
+
+                        background: Rectangle {
+                            radius: 8
+                            implicitWidth: 16
+                            implicitHeight: 16
+                            color: button.hovered ? "#ccc" : tabRectangle.color
+                            Text {text: "x"; anchors.centerIn: parent; color: "gray"}
+                        }
+                        onClicked: tabButton.closeTab()
+                    }
                 }
             }
 
@@ -524,7 +528,8 @@ ApplicationWindow {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.left: parent.left
-        width: 100
+
+        width: 160
 
         contentItem: ListView {
             model: tabBar.contentModel
@@ -549,8 +554,13 @@ ApplicationWindow {
 
         function createTab(profile, focusOnNewTab = true, url = undefined) {
             var webview = tabComponent.createObject(tabLayout, {profile: profile});
-            var newTabButton = tabButtonComponent.createObject(tabBar, {tabTitle: Qt.binding(function () { return webview.title; })});
+            var newTabButton = tabButtonComponent.createObject(tabBar, {
+                tabTitle: Qt.binding(function () { return webview.title; }),
+                tabIndex: tabBar.count
+            });
+
             tabBar.addItem(newTabButton);
+
             if (focusOnNewTab) {
                 tabBar.setCurrentIndex(tabBar.count - 1);
             }
