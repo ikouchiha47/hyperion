@@ -14,6 +14,7 @@ set(INSTALL_EXAMPLEDIR "${INSTALL_EXAMPLESDIR}/hypercore/dist")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick WebEngineQuick)
+qt_standard_project_setup(REQUIRES 6.8)
 
 qt_add_executable(quicknanobrowser
     main.cpp
@@ -55,6 +56,7 @@ qt_add_qml_module(quicknanobrowser
 # Resources:
 set(resources_resource_files
     "ApplicationRoot.qml"
+    "ToolButtonGroup.qml"
     "BrowserDialog.qml"
     "BrowserWindow.qml"
     "DownloadView.qml"

@@ -173,57 +173,9 @@ ApplicationWindow {
         RowLayout {
             anchors.fill: parent
 
-            ToolButton {
-                enabled: currentWebView && (currentWebView.canGoBack || currentWebView.canGoForward)
-                onClicked: historyMenu.open()
-                text: qsTr("▼")
-                Menu {
-                    id: historyMenu
-                    Instantiator {
-                        model: currentWebView && currentWebView.history.items
-                        MenuItem {
-                            text: model.title
-                            onTriggered: currentWebView.goBackOrForward(model.offset)
-                            checkable: !enabled
-                            checked: !enabled
-                            enabled: model.offset
-                        }
-
-                        onObjectAdded: function(index, object) {
-                            historyMenu.insertItem(index, object)
-                        }
-                        onObjectRemoved: function(index, object) {
-                            historyMenu.removeItem(object)
-                        }
-                    }
-                }
-            }
-
-            ToolButton {
-                id: backButton
-                icon.source: "qrc:/icons/go-previous.png"
-                onClicked: currentWebView.goBack()
-                enabled: currentWebView && currentWebView.canGoBack
-                activeFocusOnTab: !browserWindow.platformIsMac
-            }
-            ToolButton {
-                id: forwardButton
-                icon.source: "qrc:/icons/go-next.png"
-                onClicked: currentWebView.goForward()
-                enabled: currentWebView && currentWebView.canGoForward
-                activeFocusOnTab: !browserWindow.platformIsMac
-            }
-            ToolButton {
-                id: reloadButton
-                icon.source: currentWebView && currentWebView.loading ? "qrc:/icons/process-stop.png" : "qrc:/icons/view-refresh.png"
-                onClicked: currentWebView && currentWebView.loading ? currentWebView.stop() : currentWebView.reload()
-                activeFocusOnTab: !browserWindow.platformIsMac
-            }
-
-            Item {
-                Layout.fillWidth: true 
-                Layout.fillHeight: true 
-                width: 2
+            ToolButtonGroup {
+                width: 148
+                height: navigationBar.height
             }
 
             TextField {
@@ -231,10 +183,8 @@ ApplicationWindow {
                 implicitHeight: parent.height - 10
 
                 clip: true
-                leftPadding: 24
+                // leftPadding: 24
                 focus: true
-
-                anchors.leftMargin: 200
 
                 Layout.fillWidth: true
                 verticalAlignment: TextInput.AlignVCenter
@@ -463,32 +413,36 @@ ApplicationWindow {
         id: tabButtonComponent
 
         TabButton {
-            property color nonSelectedColor: "transparent"
             property string tabTitle: "New Tab"
             property int tabIndex: -1
 
             width: 160
 
             implicitWidth: Math.max(text.width + 10, 60)
-            implicitHeight: 50
+            implicitHeight: 48
 
             id: tabButton
+
+            background: Rectangle {
+                anchors.fill: parent
+                color: "#333"
+            }
 
             contentItem: Rectangle {
                 id: tabRectangle
                 color: "transparent"
-                
+
                 Rectangle {
                     anchors.fill: parent
-                    radius: 8
-                    color: tabBar.currentIndex === tabIndex ? "#eee" : "transparent"
-                    
+                    radius: 12
+                    color: tabBar.currentIndex === tabIndex ? Qt.rgba(0.9, 0.9, 0.9, 0.3) : "transparent" 
+
                     Text {
                         id: tabText
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.centerIn: parent 
                         text: tabButton.tabTitle
-                        color: tabBar.currentIndex === tabIndex ? "black" : "#eee"
+                        color: tabBar.currentIndex === tabIndex ? "#fff" : "#eee"
                         font.weight: tabBar.currentIndex === tabIndex ? Font.Bold : Font.Normal
                         elide: Text.ElideRight
                         maximumLineCount: 1
