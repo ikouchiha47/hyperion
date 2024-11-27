@@ -31,8 +31,8 @@
 // }
 
 int main(int argc, char **argv) {
-    QCoreApplication::setApplicationName("Quick Nano Browser");
-    QCoreApplication::setOrganizationName("QtProject");
+    QCoreApplication::setApplicationName("Hyperion");
+    QCoreApplication::setOrganizationName("Hyperion");
 
     QtWebEngineQuick::initialize();
 
@@ -40,7 +40,7 @@ int main(int argc, char **argv) {
     QLoggingCategory::setFilterRules(QStringLiteral("qt.webenginecontext.debug=true"));
 
     QQmlApplicationEngine appEngine;
-    appEngine.load(QUrl("qrc:/ApplicationRoot.qml"));
+    appEngine.load(QUrl("qrc:/qml/ApplicationRoot.qml"));
 
     if (appEngine.rootObjects().isEmpty())
         qFatal("Failed to load sources");

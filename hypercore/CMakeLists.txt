@@ -55,14 +55,14 @@ qt_add_qml_module(quicknanobrowser
 
 # Resources:
 set(resources_resource_files
-    "ApplicationRoot.qml"
-    "ToolButtonGroup.qml"
-    "BrowserDialog.qml"
-    "BrowserWindow.qml"
-    "DownloadView.qml"
-    "FindBar.qml"
-    "FullScreenNotification.qml"
-    "WebAuthDialog.qml"
+    "qml/ApplicationRoot.qml"
+    "qml/ToolButtonGroup.qml"
+    "qml/BrowserDialog.qml"
+    "qml/BrowserWindow.qml"
+    "qml/DownloadView.qml"
+    "qml/FindBar.qml"
+    "qml/FullScreenNotification.qml"
+    "qml/WebAuthDialog.qml"
 )
 
 qt_add_resources(quicknanobrowser "resources"
