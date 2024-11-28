@@ -13,12 +13,15 @@ endif()
 set(INSTALL_EXAMPLEDIR "${INSTALL_EXAMPLESDIR}/hypercore/dist")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick WebEngineQuick)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick WebEngineQuick WebEngineCore)
 qt_standard_project_setup(REQUIRES 6.8)
 
 qt_add_executable(quicknanobrowser
+    resources.qrc
     main.cpp
     utils.h
+    interceptor.h
+    interceptor.cpp
 )
 
 if(WIN32)
@@ -38,6 +41,7 @@ set_target_properties(quicknanobrowser PROPERTIES
     CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
 
 )
+target_compile_definitions(${PROJECT_NAME} PRIVATE QT_MESSAGELOGCONTEXT)
 
 target_link_libraries(quicknanobrowser PUBLIC
     Qt::Core
@@ -45,6 +49,7 @@ target_link_libraries(quicknanobrowser PUBLIC
     Qt::Qml
     Qt::Quick
     Qt::WebEngineQuick
+    Qt6::WebEngineCore
 )
 
 qt_add_qml_module(quicknanobrowser
@@ -86,6 +91,17 @@ qt_add_resources(quicknanobrowser "resources1"
         "icons/3rdparty"
     FILES
         ${resources1_resource_files}
+)
+
+set(resources2_resource_files
+    "fonts/FontAwesome.ttf"
+)
+
+qt_add_resources(quicknanobrowser "resources2"
+    PREFIX
+        "/"
+    FILES
+        ${resources2_resource_files}
 )
 
 if(TARGET Qt::Widgets)

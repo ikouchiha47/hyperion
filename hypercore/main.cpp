@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR BSD-3-Clause
 
 #include "utils.h"
+#include "interceptor.h"
 
 #include <QtWebEngineQuick/qtwebenginequickglobal.h>
 
@@ -13,22 +14,25 @@
 #include <QtCore/QCommandLineParser>
 #include <QtCore/QCommandLineOption>
 #include <QtCore/QLoggingCategory>
+#include <QQuickWebEngineProfile>
+#include <utility>
 
-// static QUrl startupUrl() {
-//     QUrl ret;
-//     QStringList args(qApp->arguments());
-//     args.takeFirst();
-//
-//     for (const QString &arg : qAsConst(args)) {
-//         if (arg.startsWith(QLatin1Char('-')))
-//              continue;
-//
-//         ret = Utils::fromUserInput(arg);
-//         if (ret.isValid())
-//             return ret;
-//     }
-//     return QUrl(QStringLiteral("chrome://qt"));
-// }
+
+static QUrl startupUrl() {
+    QUrl ret;
+    QStringList args(qApp->arguments());
+    args.takeFirst();
+
+    for (const QString &arg : std::as_const(args)) {
+        if (arg.startsWith(QLatin1Char('-')))
+             continue;
+
+        ret = Utils::fromUserInput(arg);
+        if (ret.isValid())
+            return ret;
+    }
+    return QUrl(QStringLiteral("chrome://qt"));
+}
 
 int main(int argc, char **argv) {
     QCoreApplication::setApplicationName("Hyperion");
@@ -37,14 +41,30 @@ int main(int argc, char **argv) {
     QtWebEngineQuick::initialize();
 
     QGuiApplication app(argc, argv);
-    QLoggingCategory::setFilterRules(QStringLiteral("qt.webenginecontext.debug=true"));
+    // QLoggingCategory::setFilterRules(QStringLiteral("qt.webenginecontext.debug=true"));
+
+    QLoggingCategory::setFilterRules(
+        "qt.webenginecontext.debug=true\n"
+        "qt.webenginepage.debug=true\n"
+        "qt.webengine.debug=true"
+    );
 
     QQmlApplicationEngine appEngine;
+    CustomInterceptor *interceptor = new CustomInterceptor(&app);
+
+    QQuickWebEngineProfile *defaultProfile = QQuickWebEngineProfile::defaultProfile();
+    defaultProfile->setUrlRequestInterceptor(interceptor);
+
+    appEngine.rootContext()->setContextProperty("customInterceptor", interceptor);
+
     appEngine.load(QUrl("qrc:/qml/ApplicationRoot.qml"));
 
     if (appEngine.rootObjects().isEmpty())
         qFatal("Failed to load sources");
 
+    QMetaObject::invokeMethod(appEngine.rootObjects().constFirst(),
+                              "load", 
+                              Q_ARG(QVariant, startupUrl()));
 
     return app.exec();
 }

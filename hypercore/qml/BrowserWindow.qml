@@ -183,7 +183,7 @@ ApplicationWindow {
                 implicitHeight: parent.height - 10
 
                 clip: true
-                // leftPadding: 24
+                leftPadding: 24
                 focus: true
 
                 Layout.fillWidth: true
@@ -205,6 +205,7 @@ ApplicationWindow {
                     onClicked: {
                         var textSelectionStartPos = addressBar.selectionStart;
                         var textSelectionEndPos = addressBar.selectionEnd;
+
                         textFieldContextMenu.open();
                         addressBar.select(textSelectionStartPos, textSelectionEndPos);
                     }
@@ -245,9 +246,10 @@ ApplicationWindow {
                     when: currentWebView
                     value: currentWebView.url
                 }
-                onAccepted: currentWebView.url = Utils.fromUserInput(text)
+                onAccepted: currentWebView.url = Utils.fromUserInput(text.trim().replace(/\s+/g, ''), customInterceptor.redirectToHttps)
                 selectByMouse: true
             }
+
             ToolButton {
                 id: settingsMenuButton
                 text: qsTr("⋮")
@@ -331,6 +333,13 @@ ApplicationWindow {
                         text: "Open DevTools"
                         checkable: true
                         checked: false
+                    }
+                    MenuItem {
+                        id: redirectToHttpsToggle
+                        text: "Redirect to HTTPS"
+                        checkable: true
+                        checked: customInterceptor.redirectToHttps
+                        onToggled: customInterceptor.redirectToHttps = checked
                     }
                     MenuItem {
                         id: pdfViewerEnabled
@@ -483,6 +492,8 @@ ApplicationWindow {
         anchors.bottom: parent.bottom
         anchors.left: parent.left
 
+        anchors.topMargin: 8
+
         width: 160
 
         contentItem: ListView {
@@ -541,7 +552,7 @@ ApplicationWindow {
             id: tabComponent
             WebEngineView {
                 id: webEngineView
-                focus: true
+                focus: true 
 
                 onLinkHovered: function(hoveredUrl) {
                     if (hoveredUrl == "")

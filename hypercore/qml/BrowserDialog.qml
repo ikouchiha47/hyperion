@@ -13,6 +13,7 @@ Window {
     height: 600
     visible: true
     onClosing: destroy()
+
     WebEngineView {
         id: webView
         anchors.fill: parent
@@ -22,6 +23,19 @@ Window {
             window.y = geometry.y
             window.width = geometry.width
             window.height = geometry.height
+        }
+
+        property bool redirectToHttps: true
+
+        onLoadingChanged: {
+            console.log("hererre", redirectToHttps, url)
+            if (redirectToHttps && url.startsWith("http://")) {
+                var httpsUrl = url.replace("http://", "https://");
+                if (url !== httpsUrl) {
+                    secureUrl = httpsUrl;
+                    url = secureUrl;
+                }
+            }
         }
     }
 }

@@ -12,6 +12,11 @@ Item {
     width: parent.width
     height: parent.height
 
+    FontLoader {
+        id: fontAwesome
+        source: "qrc:/fonts/FontAwesome.ttf"
+    }
+
     Row { 
         anchors.fill: parent
         spacing: 10
@@ -53,31 +58,57 @@ Item {
 
         ToolButton {
             id: backButton
-            icon.source: "qrc:/icons/go-previous.png"
+
             onClicked: currentWebView.goBack()
             enabled: currentWebView && currentWebView.canGoBack
             activeFocusOnTab: !browserWindow.platformIsMac
 
             height: parent.height
+            hoverEnabled: false
 
+            Text {
+                anchors.centerIn: parent
+                font.family: fontAwesome.name
+                font.pointSize: 16
+                text: "\uf060"
+                color: backButton.enabled ? "#fff" : "#999"
+            }
         }
         ToolButton {
             id: forwardButton
-            icon.source: "qrc:/icons/go-next.png"
+
             onClicked: currentWebView.goForward()
             enabled: currentWebView && currentWebView.canGoForward
             activeFocusOnTab: !browserWindow.platformIsMac
+            hoverEnabled: false
 
             height: parent.height
-
+            Text {
+                anchors.centerIn: parent
+                font.family: fontAwesome.name
+                font.pointSize: 16
+                text: "\uf061"
+                color: forwardButton.enabled ? "#fff" : "#999"
+            }
         }
         ToolButton {
             id: reloadButton
-            icon.source: currentWebView && currentWebView.loading ? "qrc:/icons/process-stop.png" : "qrc:/icons/view-refresh.png"
             onClicked: currentWebView && currentWebView.loading ? currentWebView.stop() : currentWebView.reload()
             activeFocusOnTab: !browserWindow.platformIsMac
 
             height: parent.height
+            hoverEnabled: false
+            enabled: currentWebView && currentWebView.loading
+
+            contentItem: Text {
+                text: currentWebView && currentWebView.loading ? "\uf00d" : "\uf021"
+                font.family: fontAwesome.name
+                font.pointSize: 16
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+                anchors.centerIn: parent
+                color: reloadButton.enabled ? "#fff" : "#999"
+            }
         }
     }
 }

@@ -15,7 +15,7 @@ QtObject {
             fullVersionList["QuickNanoBrowser"] = "1.0";
             defaultProfile.clientHints.fullVersionList = fullVersionList;
 
-            load("chrome://qt")
+            // load("chrome://qt")
         }
 
     }

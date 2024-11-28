@@ -1,12 +1,12 @@
 <RCC>
     <qresource prefix="/">
-        <file>ApplicationRoot.qml</file>
-        <file>BrowserDialog.qml</file>
-        <file>BrowserWindow.qml</file>
-        <file>DownloadView.qml</file>
-        <file>FindBar.qml</file>
-        <file>FullScreenNotification.qml</file>
-        <file>WebAuthDialog.qml</file>
+        <file>qml/ApplicationRoot.qml</file>
+        <file>qml/BrowserDialog.qml</file>
+        <file>qml/BrowserWindow.qml</file>
+        <file>qml/DownloadView.qml</file>
+        <file>qml/FindBar.qml</file>
+        <file>qml/FullScreenNotification.qml</file>
+        <file>qml/WebAuthDialog.qml</file>
     </qresource>
     <qresource prefix="/icons">
         <file alias="go-next.png">icons/3rdparty/go-next.png</file>
@@ -14,4 +14,7 @@
         <file alias="process-stop.png">icons/3rdparty/process-stop.png</file>
         <file alias="view-refresh.png">icons/3rdparty/view-refresh.png</file>
     </qresource>
+	<qresource prefix="/fonts">
+		<file>fonts/FontAwesome.ttf</file>
+	</qresource>
 </RCC>
