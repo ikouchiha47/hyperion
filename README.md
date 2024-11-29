@@ -2,6 +2,8 @@
 
 qt6 based web browser
 
+![image](./Screenshot_20241129_181117.png)
+
 - Started experimenting with rust. But the build times are killing my ADD stuff.
 - Switching to fucking C++ for creating UI. (Gosh what days)
 - Guess I will just have to write safe code, coz I haven't got all day.
@@ -29,7 +31,6 @@ qt6 based web browser
 - [ ] Think about allowing vim-motions. No one got it right.
 - [ ] Check security of cookies and stuff
 - [ ] Make the browser UI configurable
-    - sidebar and background and shit like 
+    - sidebar and background and shit like
     - !important allow the address bar to be at bottom, and sidebar to right
     - themes?
-
