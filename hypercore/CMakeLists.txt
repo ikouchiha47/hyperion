@@ -41,9 +41,26 @@ set_target_properties(quicknanobrowser PROPERTIES
     CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
 
 )
+
 target_compile_definitions(${PROJECT_NAME} PRIVATE QT_MESSAGELOGCONTEXT)
 
+set(TFLITE_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/../thparty/include" CACHE PATH "Directory that contains external libraries")
+
+set(TFLITE_LIB_DIR "${CMAKE_SOURCE_DIR}/../thparty/include/lib/linux_64")
+
+# Include directories for TensorFlow Lite
+include_directories(
+    ${TFLITE_INCLUDE_DIR}
+    ${TFLITE_INCLUDE_DIR}/tensorflow/lite
+    ${TFLITE_INCLUDE_DIR}/tensorflow/compiler
+    ${TFLITE_INCLUDE_DIR}/flatbuffers
+)
+
+# Link the TensorFlow Lite shared library
+link_directories(${TFLITE_LIB_DIR})
+
 target_link_libraries(quicknanobrowser PUBLIC
+    ${TFLITE_LIB_DIR}/libtensorflowlite.so
     Qt::Core
     Qt::Gui
     Qt::Qml

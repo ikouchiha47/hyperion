@@ -15,8 +15,8 @@
 #include <QtCore/QCommandLineOption>
 #include <QtCore/QLoggingCategory>
 #include <QQuickWebEngineProfile>
-#include <utility>
 
+#include "tensorflow/lite/interpreter.h"
 
 static QUrl startupUrl() {
     QUrl ret;
