@@ -452,16 +452,23 @@ ApplicationWindow {
                     anchors.fill: parent
                     radius: 12
                     color: tabBar.currentIndex === tabIndex ? Qt.rgba(0.9, 0.9, 0.9, 0.3) : "transparent" 
+                    clip: true
+
+                    border.width: 2
+                    border.color: "red"
 
                     Text {
                         id: tabText
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.centerIn: parent 
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        anchors.leftMargin: 8
                         text: tabButton.tabTitle
                         color: tabBar.currentIndex === tabIndex ? "#fff" : "#eee"
                         font.weight: tabBar.currentIndex === tabIndex ? Font.Bold : Font.Normal
                         elide: Text.ElideRight
-                        maximumLineCount: 1
+                        width: 120
                     }
 
                     Button {
@@ -476,6 +483,7 @@ ApplicationWindow {
                             radius: 8
                             implicitWidth: 16
                             implicitHeight: 16
+                            clip: true
                             color: button.hovered ? "#ccc" : tabRectangle.color
                             Text {text: "x"; anchors.centerIn: parent; color: "gray"}
                         }

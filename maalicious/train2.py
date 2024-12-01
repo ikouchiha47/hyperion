@@ -179,12 +179,12 @@ def run(data):
 if __name__ == "__main__":
     # read dataset
     data = pd.read_csv("./dataset/malicious_phish.csv")
-    # data2 = pd.read_csv("./dataset/new_data_urls.csv")
+    data2 = pd.read_csv("./dataset/new_data_urls.csv")
     #
-    # data2["type"] = data2["status"].apply(lambda x: "phishing" if x == 0 else "benign")
-    # data2.drop("status", axis=1, inplace=True)
+    data2["type"] = data2["status"].apply(lambda x: "phishing" if x == 0 else "benign")
+    data2.drop("status", axis=1, inplace=True)
     #
-    # data = pd.concat([data, data2], ignore_index=True)
+    data = pd.concat([data, data2], ignore_index=True)
 
     print("initial state")
     print(data.head())
