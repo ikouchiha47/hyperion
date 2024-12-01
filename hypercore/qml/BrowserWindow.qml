@@ -183,7 +183,7 @@ ApplicationWindow {
                 implicitHeight: parent.height - 10
 
                 clip: true
-                leftPadding: 24
+                leftPadding: faviconImage.source == '' ? 16 : 36
                 focus: true
 
                 Layout.fillWidth: true
@@ -191,7 +191,7 @@ ApplicationWindow {
 
                 Image {
                     anchors.verticalCenter: addressBar.verticalCenter;
-                    x: 5
+                    x: 12
                     z: 2
                     id: faviconImage
                     width: 16; height: 16
@@ -453,9 +453,6 @@ ApplicationWindow {
                     radius: 12
                     color: tabBar.currentIndex === tabIndex ? Qt.rgba(0.9, 0.9, 0.9, 0.3) : "transparent" 
                     clip: true
-
-                    border.width: 2
-                    border.color: "red"
 
                     Text {
                         id: tabText
