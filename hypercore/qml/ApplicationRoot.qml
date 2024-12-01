@@ -17,7 +17,6 @@ QtObject {
 
             // load("chrome://qt")
         }
-
     }
 
     property QtObject otrProfile: WebEngineProfile {

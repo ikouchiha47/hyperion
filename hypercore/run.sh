@@ -41,4 +41,9 @@ if [[ "$1" =~ "daemon" ]]; then
     echo $! > $PID_FILE
 fi
 
-$BINARY
+if [[ "$1" == *"trace"* ]]; then
+    echo "trace"
+     strace -o trace.log $BINARY
+ else
+     $BINARY
+fi

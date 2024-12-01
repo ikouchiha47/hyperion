@@ -6,6 +6,8 @@ train a model to detect mailicous urls. probably return a percentage.
 
 - [https://www.kaggle.com/datasets/sid321axn/malicious-urls-datase](https://www.kaggle.com/datasets/sid321axn/malicious-urls-datase)
 - [https://scikit-learn.org/stable/auto_examples/linear_model/plot_ols.html](https://scikit-learn.org/stable/auto_examples/linear_model/plot_ols.html)
+- [https://medium.com/@minhanh.dongnguyen/building-a-malicious-url-predictor-using-lgs-tfidf-mnb-tfidf-3307152c5a5d](https://medium.com/@minhanh.dongnguyen/building-a-malicious-url-predictor-using-lgs-tfidf-mnb-tfidf-3307152c5a5d)
+- [https://medium.com/@cmukesh8688/activation-functions-sigmoid-tanh-relu-leaky-relu-softmax-50d3778dcea5](https://medium.com/@cmukesh8688/activation-functions-sigmoid-tanh-relu-leaky-relu-softmax-50d3778dcea5)
 
 ### required
 

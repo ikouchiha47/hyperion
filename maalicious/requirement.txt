@@ -4,3 +4,4 @@ python-whois
 tld
 scikit-learn
 tensorflow
+tf_keras

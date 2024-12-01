@@ -18,10 +18,12 @@ qt_standard_project_setup(REQUIRES 6.8)
 
 qt_add_executable(quicknanobrowser
     resources.qrc
+    thieflite.h
+    thieflite.cpp
     main.cpp
     utils.h
     interceptor.h
-    interceptor.cpp
+    interceptor.cpp 
 )
 
 if(WIN32)
@@ -34,7 +36,7 @@ endif()
 set_target_properties(quicknanobrowser PROPERTIES
     WIN32_EXECUTABLE TRUE
     MACOSX_BUNDLE TRUE
-    MACOSX_BUNDLE_GUI_IDENTIFIER "io.qt.examples.webenginequick.quicknanobrowser"
+    MACOSX_BUNDLE_GUI_IDENTIFIER "hyper.ion"
 
     CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
     CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib

@@ -16,7 +16,8 @@
 #include <QtCore/QLoggingCategory>
 #include <QQuickWebEngineProfile>
 
-#include "tensorflow/lite/interpreter.h"
+#include "thieflite.h"
+
 
 static QUrl startupUrl() {
     QUrl ret;
@@ -55,16 +56,31 @@ int main(int argc, char **argv) {
     QQuickWebEngineProfile *defaultProfile = QQuickWebEngineProfile::defaultProfile();
     defaultProfile->setUrlRequestInterceptor(interceptor);
 
+    TFLiteModel::instance();
+    TFLiteModel::instance()->loadModel("../thparty/include/mlmodels/phishing_detection.tflite");
+
+    qDebug() << "model loaded" << TFLiteModel::instance()->isModelLoaded();
+
+    static auto instance = TFLiteModel::instance();
+
+    // qmlRegisterSingletonInstance<TFLiteModel>("hy.per.ion", 1, 0, "TFLiteModel", instance);
+    // qmlRegisterSingletonType<TFLiteModel>("hy.per.ion", 1, 0, "TFLiteModel", [](QQmlEngine*, QJSEngine*) -> QObject* {
+    //     return TFLiteModel::instance();
+    // });
+
     appEngine.rootContext()->setContextProperty("customInterceptor", interceptor);
+    appEngine.rootContext()->setContextProperty("fishDetector", instance);
 
     appEngine.load(QUrl("qrc:/qml/ApplicationRoot.qml"));
 
     if (appEngine.rootObjects().isEmpty())
         qFatal("Failed to load sources");
 
+
     QMetaObject::invokeMethod(appEngine.rootObjects().constFirst(),
                               "load", 
                               Q_ARG(QVariant, startupUrl()));
+
 
     return app.exec();
 }

@@ -246,7 +246,14 @@ ApplicationWindow {
                     when: currentWebView
                     value: currentWebView.url
                 }
-                onAccepted: currentWebView.url = Utils.fromUserInput(text.trim().replace(/\s+/g, ''), customInterceptor.redirectToHttps)
+                onAccepted: {
+                    const sanitizedUrl = text.trim().replace(/\s+/g, '');
+
+                    if (sanitizedUrl.startsWith("http")) {
+                        fishDetector.isMalicious(sanitizedUrl)
+                    }
+                    currentWebView.url = Utils.fromUserInput(sanitizedUrl, customInterceptor.redirectToHttps)
+                }
                 selectByMouse: true
             }
 

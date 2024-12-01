@@ -2,4 +2,7 @@ node_modules/
 target/
 *venv*
 thparty/*
+*.log
 !thparty/include
+
+__hyperbase__
