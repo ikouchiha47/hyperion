@@ -74,13 +74,18 @@ def predict(url, n_features=24):
     interpreter.invoke()
 
     output_data = interpreter.get_tensor(output_details[0]["index"])
-    print(f"Prediction probability: {output_data[0]}")
+    print(f"Prediction probability: {output_data}")
 
     # Interpret the result
     predicted_class = np.argmax(output_data)
     print("predicted class", predicted_class, output_data)
 
 
-predict("https://google.com")
-predict("https://www.google.com")
-predict("http://www.marketingbyinternet.com/mo/e56508df639f6ce7d55c81ee3fcd5ba8/")
+uus = [
+    "https://google.com",
+    "https://www.google.com",
+    "http://www.marketingbyinternet.com/mo/e56508df639f6ce7d55c81ee3fcd5ba8/",
+    "000011accesswebform.godaddysites.com",
+]
+
+[predict(u) for u in uus]

@@ -28,7 +28,7 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
 
         ToolButton {
-            enabled: currentWebView && (currentWebView.canGoBack || currentWebView.canGoForward)
+            enabled: currentWebView && (currentWebView.engine.canGoBack || currentWebView.engine.canGoForward)
             onClicked: historyMenu.open()
             text: qsTr("▼")
 
@@ -37,10 +37,10 @@ Item {
             Menu {
                 id: historyMenu
                 Instantiator {
-                    model: currentWebView && currentWebView.history.items
+                    model: currentWebView && currentWebView.engine.history.items
                     MenuItem {
                         text: model.title
-                        onTriggered: currentWebView.goBackOrForward(model.offset)
+                        onTriggered: currentWebView.engine.goBackOrForward(model.offset)
                         checkable: !enabled
                         checked: !enabled
                         enabled: model.offset
@@ -59,8 +59,8 @@ Item {
         ToolButton {
             id: backButton
 
-            onClicked: currentWebView.goBack()
-            enabled: currentWebView && currentWebView.canGoBack
+            onClicked: currentWebView.engine.goBack()
+            enabled: currentWebView && currentWebView.engine.canGoBack
             activeFocusOnTab: !browserWindow.platformIsMac
 
             height: parent.height
@@ -77,8 +77,8 @@ Item {
         ToolButton {
             id: forwardButton
 
-            onClicked: currentWebView.goForward()
-            enabled: currentWebView && currentWebView.canGoForward
+            onClicked: currentWebView.engine.goForward()
+            enabled: currentWebView && currentWebView.engine.canGoForward
             activeFocusOnTab: !browserWindow.platformIsMac
             hoverEnabled: false
 
@@ -93,15 +93,15 @@ Item {
         }
         ToolButton {
             id: reloadButton
-            onClicked: currentWebView && currentWebView.loading ? currentWebView.stop() : currentWebView.reload()
+            onClicked: currentWebView && currentWebView.engine.loading ? currentWebView.engine.stop() : currentWebView.engine.reload()
             activeFocusOnTab: !browserWindow.platformIsMac
 
             height: parent.height
             hoverEnabled: false
-            enabled: currentWebView && currentWebView.loading
+            enabled: currentWebView && currentWebView.engine.loading
 
             contentItem: Text {
-                text: currentWebView && currentWebView.loading ? "\uf00d" : "\uf021"
+                text: currentWebView && currentWebView.engine.loading ? "\uf00d" : "\uf021"
                 font.family: fontAwesome.name
                 font.pointSize: 16
                 verticalAlignment: Text.AlignVCenter

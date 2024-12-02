@@ -2,7 +2,8 @@
 
 qt6 based web browser
 
-![image](./Screenshot_20241129_181117.png)
+![image](./basicbrowser.png)
+![split_view](./fullview.png)
 
 - Started experimenting with rust. But the build times are killing my ADD stuff.
 - Switching to fucking C++ for creating UI. (Gosh what days)

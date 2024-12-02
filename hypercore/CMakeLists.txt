@@ -82,6 +82,7 @@ set(resources_resource_files
     "qml/ApplicationRoot.qml"
     "qml/ToolButtonGroup.qml"
     "qml/BrowserDialog.qml"
+    "qml/WebView.qml"
     "qml/BrowserWindow.qml"
     "qml/DownloadView.qml"
     "qml/FindBar.qml"

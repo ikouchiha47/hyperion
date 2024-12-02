@@ -17,6 +17,8 @@ ApplicationWindow {
     property int previousVisibility: Window.Windowed
     property int createdTabs: 0
 
+    property bool splitEnabled: false
+
     width: 1300
     height: 900
     visible: true
@@ -164,6 +166,13 @@ ApplicationWindow {
     Action {
         shortcut: StandardKey.FindPrevious
         onTriggered: findBar.findPrevious()
+    }
+
+    Action {
+        shortcut: "Ctrl+/"
+        onTriggered: function() {
+            splitEnabled = !splitEnabled
+        }
     }
 
     menuBar: ToolBar {
@@ -562,9 +571,10 @@ ApplicationWindow {
 
         Component {
             id: tabComponent
-            WebEngineView {
+            WebView {
                 id: webEngineView
-                focus: true 
+                splitEnabled: browserWindow.splitEnabled
+                // focus: true 
 
                 onLinkHovered: function(hoveredUrl) {
                     if (hoveredUrl == "")
@@ -590,19 +600,34 @@ ApplicationWindow {
                         }
                     }
                 ]
-                settings.localContentCanAccessRemoteUrls: true
-                settings.localContentCanAccessFileUrls: false
-                settings.autoLoadImages: appSettings.autoLoadImages
-                settings.javascriptEnabled: appSettings.javaScriptEnabled
-                settings.errorPageEnabled: appSettings.errorPageEnabled
-                settings.pluginsEnabled: appSettings.pluginsEnabled
-                settings.fullScreenSupportEnabled: appSettings.fullScreenSupportEnabled
-                settings.autoLoadIconsForPage: appSettings.autoLoadIconsForPage
-                settings.touchIconsEnabled: appSettings.touchIconsEnabled
-                settings.webRTCPublicInterfacesOnly: appSettings.webRTCPublicInterfacesOnly
-                settings.pdfViewerEnabled: appSettings.pdfViewerEnabled
-                settings.imageAnimationPolicy: appSettings.imageAnimationPolicy
-                settings.screenCaptureEnabled: true
+
+                // settings.localContentCanAccessRemoteUrls: true
+                // settings.localContentCanAccessFileUrls: false
+                // settings.autoLoadImages: appSettings.autoLoadImages
+                // settings.javascriptEnabled: appSettings.javaScriptEnabled
+                // settings.errorPageEnabled: appSettings.errorPageEnabled
+                // settings.pluginsEnabled: appSettings.pluginsEnabled
+                // settings.fullScreenSupportEnabled: appSettings.fullScreenSupportEnabled
+                // settings.autoLoadIconsForPage: appSettings.autoLoadIconsForPage
+                // settings.touchIconsEnabled: appSettings.touchIconsEnabled
+                // settings.webRTCPublicInterfacesOnly: appSettings.webRTCPublicInterfacesOnly
+                // settings.pdfViewerEnabled: appSettings.pdfViewerEnabled
+                // settings.imageAnimationPolicy: appSettings.imageAnimationPolicy
+                // settings.screenCaptureEnabled: true
+                //
+                localContentCanAccessRemoteUrls: true
+                localContentCanAccessFileUrls: false
+                autoLoadImages: appSettings.autoLoadImages
+                javascriptEnabled: appSettings.javaScriptEnabled
+                errorPageEnabled: appSettings.errorPageEnabled
+                pluginsEnabled: appSettings.pluginsEnabled
+                fullScreenSupportEnabled: appSettings.fullScreenSupportEnabled
+                autoLoadIconsForPage: appSettings.autoLoadIconsForPage
+                touchIconsEnabled: appSettings.touchIconsEnabled
+                webRTCPublicInterfacesOnly: appSettings.webRTCPublicInterfacesOnly
+                pdfViewerEnabled: appSettings.pdfViewerEnabled
+                imageAnimationPolicy: appSettings.imageAnimationPolicy
+                screenCaptureEnabled: true
 
                 onCertificateError: function(error) {
                     if (!error.isMainFrame) {
