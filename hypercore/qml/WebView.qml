@@ -84,6 +84,10 @@ Item {
     onSplitEnabledChanged: function() {
         // console.log("split enable changed", splitEnabled)
         // activeWebView.visible = splitEnabled
+        if(!splitEnabled) {
+            // De-Init the right side
+            rightWebView.url = "chrome://qt"
+        }
     }
 
     function handleCertificateError(error) {
@@ -138,16 +142,15 @@ Item {
         customWebView.activeFocusOnPressChanged(focus)
     }
 
-
-    function closeView(view) {
-        if (view === "left") {
-            console.log("Closing left WebView");
-            leftWebViewLoader.sourceComponent = null;
-        } else if (view === "right") {
-            console.log("Closing right WebView");
-            rightWebViewLoader.sourceComponent = null;
-        }
-    }
+    // function closeView(view) {
+    //     if (view === "left") {
+    //         console.log("Closing left WebView");
+    //         leftWebViewLoader.sourceComponent = null;
+    //     } else if (view === "right") {
+    //         console.log("Closing right WebView");
+    //         rightWebViewLoader.sourceComponent = null;
+    //     }
+    // }
 
     SplitView {
         id: splitView
