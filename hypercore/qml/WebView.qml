@@ -17,7 +17,6 @@ Item {
     property alias url: leftWebView.url
     property alias title: leftWebView.title
     property alias rightUrl: rightWebView.url
-    property bool splitEnabled: browserWindow.splitEnabled
 
     property bool localContentCanAccessRemoteUrls: false
     property bool localContentCanAccessFileUrls: false
@@ -33,38 +32,127 @@ Item {
     property int imageAnimationPolicy: WebEngineSettings.ImageAnimationPolicy.Allow
     property bool screenCaptureEnabled: true
 
-    property alias engine: leftWebView
 
-    signal certificateError
-    signal newWindowRequested
-    signal fullScreenRequested
-    signal renderProcessTerminated
-    signal linkHovered
-    signal permissionRequested
-    signal registerProtocolHandlerRequested
-    signal desktopMediaRequested
-    signal selectClientCertificate
-    signal findTextFinished
-    signal loadingChanged
-    signal webAuthUxRequested
+    property Item activeWebView: leftWebView
+
+    property bool canGoBack: activeWebView ? activeWebView.canGoBack : false
+    property bool canGoForward: activeWebView ? activeWebView.canGoForward: false
+    property var history: activeWebView ? activeWebView.history : null
+
+    function goBack() {
+        if (activeWebView && activeWebView.canGoBack) {
+            activeWebView.goBack();
+        }
+    }
+
+    function goBackOrForward(steps) {
+        if (activeWebView && (activeWebView.canGoBack || activeWebView.canGoForward)) {
+            activeWebView.goBackOrForward(steps);
+        }
+    }
+
+    function stop() {
+        if(activeWebView) {
+            activeWebView.stop()
+        }
+    }
+
+    function reload() {
+        if(activeWebView) {
+            activeWebView.reload()
+        }
+    }
+
+    // property Item leftWebView: leftWebView
+    // property Item rightWebView: rightWebView
+
+    signal certificateError(string error)
+    signal newWindowRequested(var request)
+    signal fullScreenRequested(var request)
+    signal renderProcessTerminated(int terminationStatus, int exitCode)
+    signal linkHovered(string url)
+    signal permissionRequested(var permission)
+    signal registerProtocolHandlerRequested(var request)
+    signal desktopMediaRequested(var request)
+    signal selectClientCertificate(var selection)
+    signal findTextFinished(var result)
+    signal loadingChanged(var loadingInfo)
+    signal webAuthUxRequested(var request)
+    signal activeFocusOnPressChanged(bool focus)
+
+    property bool splitEnabled: false
+    onSplitEnabledChanged: function() {
+        console.log("split enable changed", splitEnabled)
+        // activeWebView.visible = splitEnabled
+    }
+
+    function handleCertificateError(error) {
+        customWebView.certificateError(error)
+    }
+
+    function handleNewWindowRequested(request) {
+        customWebView.newWindowRequested(request)
+    }
+
+    function handleFullScreenRequested(request) {
+        customWebView.fullScreenRequested(request)
+    }
+
+    function handleRenderProcessTerminated(terminationStatus, exitCode) {
+        customWebView.renderProcessTerminated(terminationStatus, exitCode)
+    }
+
+    function handleLinkHovered(url) {
+        customWebView.linkHovered(url)
+    }
+
+    function handlePermissionRequested(permission) {
+        customWebView.permissionRequested(permission)
+    }
+
+    function handleRegisterProtocolHandlerRequested(request) {
+        customWebView.registerProtocolHandlerRequested(request)
+    }
+
+    function handleDesktopMediaRequested(request) {
+        customWebView.desktopMediaRequested(request)
+    }
+
+    function handleSelectClientCertificate(selection) {
+        customWebView.selectClientCertificate(selection)
+    }
+
+    function handleFindTextFinished(result) {
+        customWebView.findTextFinished(result)
+    }
+
+    function handleLoadingChanged(loadingInfo) {
+        customWebView.loadingChanged(loadingInfo)
+    }
+
+    function handleWebAuthUxRequested(request) {
+        customWebView.webAuthUxRequested(request)
+    }
+
+    function handleActiveFocusOnPressChanged(focus) {
+        customWebView.activeFocusOnPressChanged(focus)
+    }
 
     SplitView {
         id: splitView
         anchors.fill: parent
         orientation: Qt.Horizontal
 
-        property Item activeWebView: leftWebView
-
         Behavior on SplitView.preferredWidth {
             NumberAnimation {
                 duration: 300
                 easing.type: Easing.InOutQuad
             }
-        }
+        } 
 
         Rectangle { 
             id: leftWebViewWrapper
-            border.color: splitEnabled && splitView.activeWebView == leftWebView ? "#fe00f0" : "transparent"
+            border.color: splitEnabled && customWebView.activeWebView == leftWebView ? "#fe00f0" : "transparent"
             border.width: splitEnabled ? 2 : 0
 
             SplitView.preferredWidth: splitEnabled ? (parent.width / 2 - 80) : parent.width
@@ -76,8 +164,8 @@ Item {
                 anchors.fill: parent
                 z: 1
                 onClicked: {
-                    splitView.activeWebView = leftWebView
-                    // browserWindow.activeWebView = leftWebView
+                    customWebView.activeWebView = leftWebView
+                    customWebView.handleActiveFocusOnPressChanged(true)
                 }
             }
 
@@ -88,18 +176,24 @@ Item {
                 anchors.fill: parent
                 anchors.margins: 2
 
-                onCertificateError: customWebView.certificateErrorOccurred
-                onNewWindowRequested: customWebView.newWindowRequested
-                onFullScreenRequested: customWebView.fullScreenRequested
-                onRenderProcessTerminated: customWebView.renderProcessTerminated
-                onLinkHovered: customWebView.linkHovered
-                onPermissionRequested: customWebView.permissionRequested
-                onRegisterProtocolHandlerRequested: customWebView.registerProtocolHandlerRequested
-                onDesktopMediaRequested: customWebView.desktopMediaRequested
-                onSelectClientCertificate: customWebView.selectClientCertificate
-                onFindTextFinished: customWebView.findTextFinished
-                onLoadingChanged: customWebView.loadingChanged
-                onWebAuthUxRequested: customWebView.webAuthUxRequested 
+                onCertificateError: customWebView.handleCertificateError
+                onNewWindowRequested: customWebView.handleNewWindowRequested
+                onFullScreenRequested: customWebView.handleFullScreenRequested
+                onRenderProcessTerminated: customWebView.handleRenderProcessTerminated
+                onLinkHovered: customWebView.handleLinkHovered
+                onPermissionRequested: customWebView.handlePermissionRequested
+                onRegisterProtocolHandlerRequested: customWebView.handleRegisterProtocolHandlerRequested
+                onDesktopMediaRequested: customWebView.handleDesktopMediaRequested
+                onSelectClientCertificate: customWebView.handleSelectClientCertificate
+                onFindTextFinished: customWebView.handleFindTextFinished
+                onLoadingChanged: customWebView.handleLoadingChanged
+                onWebAuthUxRequested: customWebView.handleWebAuthUxRequested
+                onActiveFocusOnPressChanged: customWebView.handleActiveFocusOnPressChanged 
+                onUrlChanged: {
+                    if (browserWindow.currentWebView === leftWebView) {
+                        addressBar.text = url.toString();
+                    }
+                }
 
                 states: [
                     State {
@@ -131,13 +225,15 @@ Item {
                     settings.pdfViewerEnabled = customWebView.pdfViewerEnabled;
                     settings.imageAnimationPolicy = customWebView.imageAnimationPolicy;
                     settings.screenCaptureEnabled = customWebView.screenCaptureEnabled;
+                    // customWebView.activeWebView = leftWebView
+                    // customWebView.handleActiveFocusOnPressChanged(true)
                 }
             }
         }
 
         Rectangle { 
             id: rightWebViewWrapper
-            border.color: splitEnabled && splitView.activeWebView == rightWebView ? "#fe00f0" : "transparent"
+            border.color: splitEnabled && customWebView.activeWebView == rightWebView ? "#fe00f0" : "transparent"
             border.width: splitEnabled ? 2 : 0
 
             SplitView.preferredWidth: splitEnabled ? (parent.width / 2 - 100) : parent.width
@@ -151,32 +247,39 @@ Item {
                     anchors.fill: parent
                     z: 1
                     onClicked: {
-                        splitView.activeWebView = rightWebView
-                        // browserWindow.activeWebView = rightWebView
+                        customWebView.activeWebView = rightWebView
+                        customWebView.handleActiveFocusOnPressChanged(true)
                     }
                 }
 
             WebEngineView {
                 id: rightWebView
-                url: leftWebView.url
+                url: "chrome://qt"
 
                 visible: splitEnabled
 
                 anchors.fill: parent
                 anchors.margins: 2
 
-                onCertificateError: customWebView.certificateError
-                onNewWindowRequested: customWebView.newWindowRequested
-                onFullScreenRequested: customWebView.fullScreenRequested
-                onRenderProcessTerminated: customWebView.renderProcessTerminated
-                onLinkHovered: customWebView.linkHovered
-                onPermissionRequested: customWebView.permissionRequested
-                onRegisterProtocolHandlerRequested: customWebView.registerProtocolHandlerRequested
-                onDesktopMediaRequested: customWebView.desktopMediaRequested
-                onSelectClientCertificate: customWebView.clientCertificateSelected
-                onFindTextFinished: customWebView.findTextFinished
-                onLoadingChanged: customWebView.loadingChanged
-                onWebAuthUxRequested: customWebView.webAuthUxRequested 
+                onCertificateError: customWebView.handleCertificateErrorOccurred
+                onNewWindowRequested: customWebView.handleNewWindowRequested
+                onFullScreenRequested: customWebView.handleFullScreenRequested
+                onRenderProcessTerminated: customWebView.handleRenderProcessTerminated
+                onLinkHovered: customWebView.handleLinkHovered
+                onPermissionRequested: customWebView.handlePermissionRequested
+                onRegisterProtocolHandlerRequested: customWebView.handleRegisterProtocolHandlerRequested
+                onDesktopMediaRequested: customWebView.handleDesktopMediaRequested
+                onSelectClientCertificate: customWebView.handleSelectClientCertificate
+                onFindTextFinished: customWebView.handleFindTextFinished
+                onLoadingChanged: customWebView.handleLoadingChanged
+                onWebAuthUxRequested: customWebView.handleWebAuthUxRequested
+                onActiveFocusOnPressChanged: customWebView.handleActiveFocusOnPressChanged
+
+                onUrlChanged: {
+                    if (browserWindow.currentWebView === rightWebView) {
+                        addressBar.text = url.toString();
+                    }
+                }
 
                 // settings: leftWebView.settings
                 Component.onCompleted: {

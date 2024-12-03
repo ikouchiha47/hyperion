@@ -13,11 +13,19 @@ import BrowserUtils
 ApplicationWindow {
     id: browserWindow
     property QtObject applicationRoot
-    property Item currentWebView: tabBar.currentIndex < tabBar.count ? tabLayout.children[tabBar.currentIndex] : null
+    // property Item currentWebView: tabBar.currentIndex < tabBar.count ? tabLayout.children[tabBar.currentIndex] : null
+
     property int previousVisibility: Window.Windowed
     property int createdTabs: 0
 
-    property bool splitEnabled: false
+    property var tabsModel: []
+
+    property Item currentWebView: tabBar.currentIndex < tabBar.count ? tabLayout.children[tabBar.currentIndex] : null
+
+    // property Item activeWebView: currentWebView && splitEnabled ? currentWebView.activeWebView : currentWebView
+    property Item activeWebView: currentWebView && tabsModel[tabBar.currentIndex]?.splitEnabled 
+                                 ? currentWebView.activeWebView
+                                 : currentWebView
 
     width: 1300
     height: 900
@@ -29,6 +37,18 @@ ApplicationWindow {
 
     onCurrentWebViewChanged: {
         findBar.reset();
+    }
+
+    function addTab() {
+        tabsModel.push({ splitEnabled: false });
+        console.log("Tab added. Total tabs:", tabsModel.length);
+    }
+
+    function toggleSplitForActiveTab() {
+        if (tabsModel[activeTabIndex]) {
+            tabsModel[activeTabIndex].splitEnabled = !tabsModel[activeTabIndex].splitEnabled;
+            console.log("Split toggled for tab:", activeTabIndex, "State:", tabsModel[activeTabIndex].splitEnabled);
+        }
     }
 
     // When using style "mac", ToolButtons are not supposed to accept focus.
@@ -166,14 +186,7 @@ ApplicationWindow {
     Action {
         shortcut: StandardKey.FindPrevious
         onTriggered: findBar.findPrevious()
-    }
-
-    Action {
-        shortcut: "Ctrl+/"
-        onTriggered: function() {
-            splitEnabled = !splitEnabled
-        }
-    }
+    } 
 
     menuBar: ToolBar {
         id: navigationBar
@@ -190,6 +203,7 @@ ApplicationWindow {
             TextField {
                 id: addressBar
                 implicitHeight: parent.height - 10
+                text: browserWindow.activeWebView ? browserWindow.activeWebView.url : "chrome://qt"
 
                 clip: true
                 leftPadding: faviconImage.source == '' ? 16 : 36
@@ -539,13 +553,18 @@ ApplicationWindow {
         Component.onCompleted: createTab(defaultProfile)
 
         function createTab(profile, focusOnNewTab = true, url = undefined) {
-            var webview = tabComponent.createObject(tabLayout, {profile: profile});
+            var webview = tabComponent.createObject(tabLayout, {profile: profile, splitEnabled: false});
+
             var newTabButton = tabButtonComponent.createObject(tabBar, {
                 tabTitle: Qt.binding(function () { return webview.title; }),
                 tabIndex: tabBar.count
             });
 
             tabBar.addItem(newTabButton);
+
+            browserWindow.tabsModel.push({
+                webview: webview,
+            });
 
             if (focusOnNewTab) {
                 tabBar.setCurrentIndex(tabBar.count - 1);
@@ -563,6 +582,9 @@ ApplicationWindow {
         function removeView(index) {
             if (tabBar.count > 1) {
                 tabBar.removeItem(tabBar.itemAt(index));
+
+                browserWindow.tabsModel.splice(index, 1);
+
                 tabLayout.children[index].destroy();
             } else {
                 browserWindow.close();
@@ -573,8 +595,18 @@ ApplicationWindow {
             id: tabComponent
             WebView {
                 id: webEngineView
-                splitEnabled: browserWindow.splitEnabled
-                // focus: true 
+                splitEnabled: tabsModel[tabBar.currentIndex].splitEnabled;
+
+                Action {
+                    shortcut: "Ctrl+/"
+                    onTriggered: function() {
+                        if (tabsModel[tabBar.currentIndex]) {
+                            var activeTab = tabsModel[tabBar.currentIndex];
+                            activeTab.webview.splitEnabled = !activeTab.webview.splitEnabled;
+                            // console.log("Toggled split for tab", tabBar.currentIndex, "to", activeTab.webview.splitEnabled);
+                        }
+                    }
+                }
 
                 onLinkHovered: function(hoveredUrl) {
                     if (hoveredUrl == "")
@@ -601,20 +633,6 @@ ApplicationWindow {
                     }
                 ]
 
-                // settings.localContentCanAccessRemoteUrls: true
-                // settings.localContentCanAccessFileUrls: false
-                // settings.autoLoadImages: appSettings.autoLoadImages
-                // settings.javascriptEnabled: appSettings.javaScriptEnabled
-                // settings.errorPageEnabled: appSettings.errorPageEnabled
-                // settings.pluginsEnabled: appSettings.pluginsEnabled
-                // settings.fullScreenSupportEnabled: appSettings.fullScreenSupportEnabled
-                // settings.autoLoadIconsForPage: appSettings.autoLoadIconsForPage
-                // settings.touchIconsEnabled: appSettings.touchIconsEnabled
-                // settings.webRTCPublicInterfacesOnly: appSettings.webRTCPublicInterfacesOnly
-                // settings.pdfViewerEnabled: appSettings.pdfViewerEnabled
-                // settings.imageAnimationPolicy: appSettings.imageAnimationPolicy
-                // settings.screenCaptureEnabled: true
-                //
                 localContentCanAccessRemoteUrls: true
                 localContentCanAccessFileUrls: false
                 autoLoadImages: appSettings.autoLoadImages
@@ -726,6 +744,11 @@ ApplicationWindow {
                 }
                 onWebAuthUxRequested: function(request) {
                     webAuthDialog.init(request);
+                }
+
+                onActiveFocusOnPressChanged: function(focus) {
+                    console.log("active focus", focus, activeWebView, currentWebView)
+                    if (focus) browserWindow.currentWebView = activeWebView
                 }
 
                 Timer {

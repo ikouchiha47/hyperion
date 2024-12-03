@@ -16,3 +16,4 @@ Resources:
 - https://doc.qt.io/qt-6/qml-qtwebview-webview.html
 - https://doc.qt.io/qt-6/qmlfirststeps.html
 - https://doc.qt.io/qt-6/qtqml-cppintegration-exposecppattributes.html
+- https://doc.qt.io/qt-6/qtqml-syntax-signals.html#adding-signals-to-custom-qml-types
