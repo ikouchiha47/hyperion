@@ -1,14 +1,14 @@
 requires(qtConfig(accessibility))
 
 TEMPLATE = app
-TARGET = quicknanobrowser
+TARGET = hyperion
 
 HEADERS = utils.h
 SOURCES = main.cpp
 
 win32 {
     CONFIG -= embed_manifest_exe
-    QMAKE_MANIFEST = $$PWD/quicknanobrowser.exe.manifest
+    QMAKE_MANIFEST = $$PWD/hyperion.exe.manifest
 }
 
 RESOURCES += resources.qrc
@@ -23,5 +23,5 @@ qtHaveModule(widgets) {
     QT += widgets # QApplication is required to get native styling with QtQuickControls
 }
 
-target.path = $$[QT_INSTALL_EXAMPLES]/webenginequick/quicknanobrowser
+target.path = $$[QT_INSTALL_EXAMPLES]/webenginequick/hyperion
 INSTALLS += target

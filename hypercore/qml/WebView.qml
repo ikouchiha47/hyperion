@@ -82,7 +82,7 @@ Item {
 
     property bool splitEnabled: false
     onSplitEnabledChanged: function() {
-        console.log("split enable changed", splitEnabled)
+        // console.log("split enable changed", splitEnabled)
         // activeWebView.visible = splitEnabled
     }
 
@@ -136,6 +136,17 @@ Item {
 
     function handleActiveFocusOnPressChanged(focus) {
         customWebView.activeFocusOnPressChanged(focus)
+    }
+
+
+    function closeView(view) {
+        if (view === "left") {
+            console.log("Closing left WebView");
+            leftWebViewLoader.sourceComponent = null;
+        } else if (view === "right") {
+            console.log("Closing right WebView");
+            rightWebViewLoader.sourceComponent = null;
+        }
     }
 
     SplitView {

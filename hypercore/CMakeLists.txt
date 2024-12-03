@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: LicenseRef-Qt-Commercial OR BSD-3-Clause
 
 cmake_minimum_required(VERSION 3.16)
-project(quicknanobrowser LANGUAGES CXX)
+project(hyperion LANGUAGES CXX)
 
 set(CMAKE_AUTOMOC ON)
 
@@ -16,7 +16,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick WebEngineQuick WebEngineCore)
 qt_standard_project_setup(REQUIRES 6.8)
 
-qt_add_executable(quicknanobrowser
+qt_add_executable(hyperion
     resources.qrc
     thieflite.h
     thieflite.cpp
@@ -28,12 +28,12 @@ qt_add_executable(quicknanobrowser
 
 if(WIN32)
     set_property(
-        TARGET quicknanobrowser
+        TARGET hyperion
         APPEND PROPERTY
-            SOURCES quicknanobrowser.exe.manifest)
+            SOURCES hyperion.exe.manifest)
 endif()
 
-set_target_properties(quicknanobrowser PROPERTIES
+set_target_properties(hyperion PROPERTIES
     WIN32_EXECUTABLE TRUE
     MACOSX_BUNDLE TRUE
     MACOSX_BUNDLE_GUI_IDENTIFIER "hyper.ion"
@@ -61,7 +61,7 @@ include_directories(
 # Link the TensorFlow Lite shared library
 link_directories(${TFLITE_LIB_DIR})
 
-target_link_libraries(quicknanobrowser PUBLIC
+target_link_libraries(hyperion PUBLIC
     ${TFLITE_LIB_DIR}/libtensorflowlite.so
     Qt::Core
     Qt::Gui
@@ -71,7 +71,7 @@ target_link_libraries(quicknanobrowser PUBLIC
     Qt6::WebEngineCore
 )
 
-qt_add_qml_module(quicknanobrowser
+qt_add_qml_module(hyperion
     URI BrowserUtils
     VERSION 1.0
     RESOURCE_PREFIX /
@@ -90,7 +90,7 @@ set(resources_resource_files
     "qml/WebAuthDialog.qml"
 )
 
-qt_add_resources(quicknanobrowser "resources"
+qt_add_resources(hyperion "resources"
     PREFIX
         "/"
     FILES
@@ -104,7 +104,7 @@ set(resources1_resource_files
     "icons/3rdparty/view-refresh.png"
 )
 
-qt_add_resources(quicknanobrowser "resources1"
+qt_add_resources(hyperion "resources1"
     PREFIX
         "/icons"
     BASE
@@ -117,7 +117,7 @@ set(resources2_resource_files
     "fonts/FontAwesome.ttf"
 )
 
-qt_add_resources(quicknanobrowser "resources2"
+qt_add_resources(hyperion "resources2"
     PREFIX
         "/"
     FILES
@@ -125,13 +125,13 @@ qt_add_resources(quicknanobrowser "resources2"
 )
 
 if(TARGET Qt::Widgets)
-    target_link_libraries(quicknanobrowser PUBLIC
+    target_link_libraries(hyperion PUBLIC
         Qt::Widgets
     )
 endif()
 
 if (APPLE)
-    set_target_properties(quicknanobrowser PROPERTIES
+    set_target_properties(hyperion PROPERTIES
         MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Info.cmake.macos.plist"
     )
 
@@ -142,13 +142,13 @@ if (APPLE)
         else()
             unset(exe_path)
         endif()
-        add_custom_command(TARGET quicknanobrowser
-            POST_BUILD COMMAND codesign --force -s - ${exe_path}quicknanobrowser.app
+        add_custom_command(TARGET hyperion
+            POST_BUILD COMMAND codesign --force -s - ${exe_path}hyperion.app
         )
     endif()
 endif()
 
-install(TARGETS quicknanobrowser
+install(TARGETS hyperion
     RUNTIME DESTINATION "${INSTALL_EXAMPLEDIR}"
     BUNDLE DESTINATION "${INSTALL_EXAMPLEDIR}"
     LIBRARY DESTINATION "${INSTALL_EXAMPLEDIR}"

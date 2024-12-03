@@ -2,7 +2,7 @@
 
 set -e
 
-APP_NAME="quicknanobrowser"
+APP_NAME="hyperion"
 BUILD_DIR="./dist"
 BINARY="$BUILD_DIR/$APP_NAME"
 PID_FILE="$BUILD_DIR/$APP_NAME.pid"
