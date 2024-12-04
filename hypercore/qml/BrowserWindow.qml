@@ -18,6 +18,7 @@ ApplicationWindow {
 
     property int previousVisibility: Window.Windowed
     property int createdTabs: 0
+    property int sideBarWidth: 180
 
     property var tabsModel: []
 
@@ -194,11 +195,16 @@ ApplicationWindow {
         id: navigationBar
         height: 48
 
+        background: Rectangle {
+            anchors.fill: parent
+            color: "#111"
+        }
+
         RowLayout {
             anchors.fill: parent
 
             ToolButtonGroup {
-                width: 148
+                width: 168
                 height: navigationBar.height
             }
 
@@ -213,6 +219,16 @@ ApplicationWindow {
 
                 Layout.fillWidth: true
                 verticalAlignment: TextInput.AlignVCenter
+                z: 2
+
+                background: Rectangle {
+                    anchors.fill: parent
+                    radius: 8
+                    border.width: 1
+                    border.color: "#eee"
+                    color: "transparent"
+                    z: 1
+                }
 
                 Image {
                     anchors.verticalCenter: addressBar.verticalCenter;
@@ -458,7 +474,7 @@ ApplicationWindow {
             property string tabTitle: "New Tab"
             property int tabIndex: -1
 
-            width: 160
+            width: sideBarWidth
 
             implicitWidth: Math.max(text.width + 10, 60)
             implicitHeight: 40
@@ -479,17 +495,6 @@ ApplicationWindow {
                     radius: 12
                     color: tabBar.currentIndex === tabIndex ? "#2e3846" : "transparent" 
                     clip: true
-
-                    // DropShadow {
-                    //     anchors.fill: parent
-                    //     source: parent
-                    //     radius: 12
-                    //     color: "#80000005"
-                    //     samples: 16 
-                    //     horizontalOffset: 1 
-                    //     verticalOffset: 1
-                    //     spread: 2 
-                    // }
 
                     Text {
                         id: tabText
@@ -544,7 +549,9 @@ ApplicationWindow {
 
         anchors.topMargin: 8
 
-        width: 160
+        width: sideBarWidth
+
+        //TODO: make tabBar resizable
 
         contentItem: ListView {
             model: tabBar.contentModel
@@ -599,7 +606,6 @@ ApplicationWindow {
                 tabBar.removeItem(tabBar.itemAt(index));
 
                 browserWindow.tabsModel.splice(index, 1);
-
                 tabLayout.children[index].destroy();
             } else {
                 browserWindow.close();

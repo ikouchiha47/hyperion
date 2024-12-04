@@ -66,12 +66,14 @@ Item {
             height: parent.height
             hoverEnabled: false
 
+            // left arrow
             Text {
                 anchors.centerIn: parent
                 font.family: fontAwesome.name
                 font.pointSize: 16
-                text: "\uf060"
+                text: "\uf104"
                 color: backButton.enabled ? "#fff" : "#999"
+                font.weight: Font.Thin
             }
         }
         ToolButton {
@@ -87,7 +89,7 @@ Item {
                 anchors.centerIn: parent
                 font.family: fontAwesome.name
                 font.pointSize: 16
-                text: "\uf061"
+                text: "\uf105"
                 color: forwardButton.enabled ? "#fff" : "#999"
             }
         }
@@ -101,9 +103,9 @@ Item {
             enabled: activeWebView && activeWebView.loading ? activeWebView.loading : false
 
             contentItem: Text {
-                text: activeWebView && activeWebView.loading ? "\uf00d" : "\uf021"
+                text: activeWebView && activeWebView.loading ? "\uf00d" : "\uf2f1"
                 font.family: fontAwesome.name
-                font.pointSize: 16
+                font.pointSize: 12
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
                 anchors.centerIn: parent
