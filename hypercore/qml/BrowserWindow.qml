@@ -272,9 +272,10 @@ ApplicationWindow {
                 onAccepted: {
                     const sanitizedUrl = text.trim().replace(/\s+/g, '');
 
-                    if (sanitizedUrl.startsWith("http")) {
-                        fishDetector.isMalicious(sanitizedUrl)
-                    }
+                    // if (sanitizedUrl.startsWith("http")) {
+                    //     fishDetector.isMalicious(sanitizedUrl)
+                    // }
+
                     currentWebView.url = Utils.fromUserInput(sanitizedUrl, customInterceptor.redirectToHttps)
                 }
                 selectByMouse: true
@@ -553,7 +554,7 @@ ApplicationWindow {
         Component.onCompleted: createTab(defaultProfile)
 
         function createTab(profile, focusOnNewTab = true, url = undefined) {
-            var webview = tabComponent.createObject(tabLayout, {profile: profile, splitEnabled: false});
+            var webview = tabComponent.createObject(tabLayout, {profile: profile, splitEnabled: false, url: "chrome://qt"});
 
             var newTabButton = tabButtonComponent.createObject(tabBar, {
                 tabTitle: Qt.binding(function () { return webview.title; }),

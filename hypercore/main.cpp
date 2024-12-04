@@ -16,7 +16,7 @@
 #include <QtCore/QLoggingCategory>
 #include <QQuickWebEngineProfile>
 
-#include "thieflite.h"
+// #include "thieflite.h"
 
 
 static QUrl startupUrl() {
@@ -42,7 +42,6 @@ int main(int argc, char **argv) {
     QtWebEngineQuick::initialize();
 
     QGuiApplication app(argc, argv);
-    // QLoggingCategory::setFilterRules(QStringLiteral("qt.webenginecontext.debug=true"));
 
     QLoggingCategory::setFilterRules(
         "qt.webenginecontext.debug=true\n"
@@ -56,20 +55,15 @@ int main(int argc, char **argv) {
     QQuickWebEngineProfile *defaultProfile = QQuickWebEngineProfile::defaultProfile();
     defaultProfile->setUrlRequestInterceptor(interceptor);
 
-    TFLiteModel::instance();
-    TFLiteModel::instance()->loadModel("../thparty/include/mlmodels/phishing_detection.tflite");
+    // TFLiteModel::instance();
+    // TFLiteModel::instance()->loadModel("../thparty/include/mlmodels/phishing_detection.tflite");
 
-    qDebug() << "model loaded" << TFLiteModel::instance()->isModelLoaded();
+    // qDebug() << "model loaded" << TFLiteModel::instance()->isModelLoaded();
 
-    static auto instance = TFLiteModel::instance();
-
-    // qmlRegisterSingletonInstance<TFLiteModel>("hy.per.ion", 1, 0, "TFLiteModel", instance);
-    // qmlRegisterSingletonType<TFLiteModel>("hy.per.ion", 1, 0, "TFLiteModel", [](QQmlEngine*, QJSEngine*) -> QObject* {
-    //     return TFLiteModel::instance();
-    // });
+    // static auto instance = TFLiteModel::instance();
 
     appEngine.rootContext()->setContextProperty("customInterceptor", interceptor);
-    appEngine.rootContext()->setContextProperty("fishDetector", instance);
+    // appEngine.rootContext()->setContextProperty("fishDetector", instance);
 
     appEngine.load(QUrl("qrc:/qml/ApplicationRoot.qml"));
 

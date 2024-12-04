@@ -83,7 +83,6 @@ Item {
     property bool splitEnabled: false
     onSplitEnabledChanged: function() {
         // console.log("split enable changed", splitEnabled)
-        // activeWebView.visible = splitEnabled
         if(!splitEnabled) {
             // De-Init the right side
             rightWebView.url = "chrome://qt"
