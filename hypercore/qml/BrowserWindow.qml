@@ -8,6 +8,7 @@ import QtQuick.Controls.Fusion
 import QtQuick.Layouts
 import QtQuick.Window
 import QtWebEngine
+import Qt5Compat.GraphicalEffects
 import BrowserUtils
 
 ApplicationWindow {
@@ -30,6 +31,7 @@ ApplicationWindow {
     width: 1300
     height: 900
     visible: true
+    color: "black"
     title: currentWebView && currentWebView.title
 
     // Make sure the Qt.WindowFullscreenButtonHint is set on OS X.
@@ -459,13 +461,13 @@ ApplicationWindow {
             width: 160
 
             implicitWidth: Math.max(text.width + 10, 60)
-            implicitHeight: 48
+            implicitHeight: 40
 
             id: tabButton
 
             background: Rectangle {
                 anchors.fill: parent
-                color: "#333"
+                color: "black"
             }
 
             contentItem: Rectangle {
@@ -475,8 +477,19 @@ ApplicationWindow {
                 Rectangle {
                     anchors.fill: parent
                     radius: 12
-                    color: tabBar.currentIndex === tabIndex ? Qt.rgba(0.9, 0.9, 0.9, 0.3) : "transparent" 
+                    color: tabBar.currentIndex === tabIndex ? "#2e3846" : "transparent" 
                     clip: true
+
+                    // DropShadow {
+                    //     anchors.fill: parent
+                    //     source: parent
+                    //     radius: 12
+                    //     color: "#80000005"
+                    //     samples: 16 
+                    //     horizontalOffset: 1 
+                    //     verticalOffset: 1
+                    //     spread: 2 
+                    // }
 
                     Text {
                         id: tabText
@@ -488,6 +501,7 @@ ApplicationWindow {
                         text: tabButton.tabTitle
                         color: tabBar.currentIndex === tabIndex ? "#fff" : "#eee"
                         font.weight: tabBar.currentIndex === tabIndex ? Font.Bold : Font.Normal
+                        font.pointSize: 8
                         elide: Text.ElideRight
                         width: 120
                     }
@@ -594,6 +608,7 @@ ApplicationWindow {
 
         Component {
             id: tabComponent
+
             WebView {
                 id: webEngineView
                 splitEnabled: tabsModel[tabBar.currentIndex].splitEnabled;
@@ -603,8 +618,8 @@ ApplicationWindow {
                     onTriggered: function() {
                         if (tabsModel[tabBar.currentIndex]) {
                             var activeTab = tabsModel[tabBar.currentIndex];
+
                             activeTab.webview.splitEnabled = !activeTab.webview.splitEnabled;
-                            // console.log("Toggled split for tab", tabBar.currentIndex, "to", activeTab.webview.splitEnabled);
                         }
                     }
                 }

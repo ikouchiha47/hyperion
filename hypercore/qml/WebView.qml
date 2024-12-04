@@ -238,6 +238,7 @@ Item {
                     settings.pdfViewerEnabled = customWebView.pdfViewerEnabled;
                     settings.imageAnimationPolicy = customWebView.imageAnimationPolicy;
                     settings.screenCaptureEnabled = customWebView.screenCaptureEnabled;
+                    settings.antialiasingEnabled = true
                     // customWebView.activeWebView = leftWebView
                     // customWebView.handleActiveFocusOnPressChanged(true)
                 }
@@ -294,6 +295,21 @@ Item {
                     }
                 }
 
+                states: [
+                    State {
+                        name: "FullScreen"
+                        PropertyChanges {
+                            target: tabBar
+                            visible: false
+                            height: 0
+                        }
+                        PropertyChanges {
+                            target: navigationBar
+                            visible: false
+                        }
+                    }
+                ]
+
                 // settings: leftWebView.settings
                 Component.onCompleted: {
                     settings.localContentCanAccessRemoteUrls = customWebView.localContentCanAccessRemoteUrls;
@@ -309,6 +325,7 @@ Item {
                     settings.pdfViewerEnabled = customWebView.pdfViewerEnabled;
                     settings.imageAnimationPolicy = customWebView.imageAnimationPolicy;
                     settings.screenCaptureEnabled = customWebView.screenCaptureEnabled;
+                    settings.antialiasingEnabled = true
                 }
             }
         }
