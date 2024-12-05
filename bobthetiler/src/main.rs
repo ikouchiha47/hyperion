@@ -1,4 +1,4 @@
-use bobthetiler::tiler;
+pub mod tiler;
 
 fn main() {
     println!("Hello, world!");
@@ -7,15 +7,15 @@ fn main() {
 
     let parent_id = container.get_id();
     let next_id = container
-        .add_window(parent_id, tiler::SplitDirection::Horizontal)
+        .add_window(parent_id, tiler::SplitDirection::Horizontal, None)
         .unwrap();
 
     let _ = container
-        .add_window(next_id, tiler::SplitDirection::Vertical)
+        .add_window(next_id, tiler::SplitDirection::Vertical, None)
         .unwrap();
 
     let _ = container
-        .add_window(parent_id, tiler::SplitDirection::Horizontal)
+        .add_window(parent_id, tiler::SplitDirection::Horizontal, None)
         .unwrap();
 
     println!("{:#?}", container);
