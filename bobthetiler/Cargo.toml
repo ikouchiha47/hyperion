@@ -4,3 +4,10 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+
+[lib]
+crate-type = ["cdylib"]
+
+[[bin]]
+name = "bobthetiler"
+path = "src/main.rs"
