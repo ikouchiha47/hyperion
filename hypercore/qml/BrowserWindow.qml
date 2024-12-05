@@ -25,9 +25,9 @@ ApplicationWindow {
     property Item currentWebView: tabBar.currentIndex < tabBar.count ? tabLayout.children[tabBar.currentIndex] : null
 
     // property Item activeWebView: currentWebView && splitEnabled ? currentWebView.activeWebView : currentWebView
-    property Item activeWebView: currentWebView && tabsModel[tabBar.currentIndex]?.splitEnabled 
-                                 ? currentWebView.activeWebView
-                                 : currentWebView
+    property Item activeWebView: currentWebView && tabsModel[tabBar.currentIndex]?.webview.splitEnabled 
+                                 ? tabsModel[tabBar.currentIndex]?.webview.activeWebView
+                                 : currentWebView.activeWebView
 
     width: 1300
     height: 900
@@ -44,7 +44,7 @@ ApplicationWindow {
 
     function addTab() {
         tabsModel.push({ splitEnabled: false });
-        console.log("Tab added. Total tabs:", tabsModel.length);
+        // console.log("Tab added. Total tabs:", tabsModel.length);
     }
 
     function toggleSplitForActiveTab() {
@@ -284,8 +284,8 @@ ApplicationWindow {
                 }
  
                 Binding on text {
-                    when: currentWebView
-                    value: currentWebView.url
+                    when: activeWebView
+                    value: activeWebView.url
                 }
                 onAccepted: {
                     const sanitizedUrl = text.trim().replace(/\s+/g, '');
@@ -294,7 +294,7 @@ ApplicationWindow {
                     //     fishDetector.isMalicious(sanitizedUrl)
                     // }
 
-                    currentWebView.url = Utils.fromUserInput(sanitizedUrl, customInterceptor.redirectToHttps)
+                    activeWebView.url = Utils.fromUserInput(sanitizedUrl, customInterceptor.redirectToHttps)
                 }
                 selectByMouse: true
             }
@@ -592,11 +592,9 @@ ApplicationWindow {
                 tabBar.setCurrentIndex(tabBar.count - 1);
             }
 
-            if (url === undefined) {
-                url = "chrome://qt";
-            }
-
-            webview.url = url;
+            browserWindow.currentWebView = tabsModel[tabBar.currentIndex].webview
+            browserWindow.activeWebView = currentWebView.activeWebView
+            // console.log(browserWindow.currentWebView.activeWebView, webview.activeWebView, "after create")
 
             return webview;
         }
@@ -769,8 +767,10 @@ ApplicationWindow {
                 }
 
                 onActiveFocusOnPressChanged: function(focus) {
-                    console.log("active focus", focus, activeWebView, currentWebView)
-                    if (focus) browserWindow.currentWebView = activeWebView
+                    // console.log("active focus", focus, activeWebView, this, currentWebView, this.activeWebView, currentWebView.activeWebView, browserWindow.activeWebView)
+                    if (focus) {
+                        browserWindow.activeWebView = activeWebView
+                    }
                 }
 
                 Timer {

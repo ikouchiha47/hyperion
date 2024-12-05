@@ -261,7 +261,9 @@ Item {
                     anchors.fill: parent
                     z: 1
                     onClicked: {
+                        // console.log("b4r", customWebView.activeWebView)
                         customWebView.activeWebView = rightWebView
+                        // console.log("a8r", customWebView.activeWebView)
                         customWebView.handleActiveFocusOnPressChanged(true)
                     }
                 }
