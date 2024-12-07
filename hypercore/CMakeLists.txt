@@ -24,6 +24,10 @@ qt_add_executable(hyperion
     utils.h
     interceptor.h
     interceptor.cpp 
+    tiler.h
+    tiler.cpp
+    tabmanager.h
+    tabmanager.cpp
 )
 
 if(WIN32)
@@ -36,7 +40,7 @@ endif()
 set_target_properties(hyperion PROPERTIES
     WIN32_EXECUTABLE TRUE
     MACOSX_BUNDLE TRUE
-    MACOSX_BUNDLE_GUI_IDENTIFIER "hyper.ion"
+    MACOSX_BUNDLE_GUI_IDENTIFIER "hy.per.ion"
 
     CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
     CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib

@@ -16,7 +16,7 @@
 #include <QtCore/QLoggingCategory>
 #include <QQuickWebEngineProfile>
 
-// #include "thieflite.h"
+#include "tabmanager.h"
 
 
 static QUrl startupUrl() {
@@ -50,10 +50,15 @@ int main(int argc, char **argv) {
     );
 
     QQmlApplicationEngine appEngine;
+
     CustomInterceptor *interceptor = new CustomInterceptor(&app);
+    TabManager* tabManager = new TabManager(&app); 
 
     QQuickWebEngineProfile *defaultProfile = QQuickWebEngineProfile::defaultProfile();
     defaultProfile->setUrlRequestInterceptor(interceptor);
+
+    appEngine.rootContext()->setContextProperty("customInterceptor", interceptor);
+    appEngine.rootContext()->setContextProperty("tabManager", tabManager);
 
     // TFLiteModel::instance();
     // TFLiteModel::instance()->loadModel("../thparty/include/mlmodels/phishing_detection.tflite");
@@ -62,7 +67,6 @@ int main(int argc, char **argv) {
 
     // static auto instance = TFLiteModel::instance();
 
-    appEngine.rootContext()->setContextProperty("customInterceptor", interceptor);
     // appEngine.rootContext()->setContextProperty("fishDetector", instance);
 
     appEngine.load(QUrl("qrc:/qml/ApplicationRoot.qml"));
